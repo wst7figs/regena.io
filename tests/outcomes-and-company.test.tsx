@@ -15,6 +15,7 @@ describe("outcomes and company", () => {
   it("renders the confirmed team without generated portrait images", () => {
     render(<TeamGrid />);
     expect(screen.getAllByTestId("team-member")).toHaveLength(4);
+    expect(screen.getByText("Jean-Pierre van Eeden")).toBeVisible();
     expect(screen.getByText("Julian Hollen")).toBeVisible();
     expect(screen.getByText("AI Engineer & Software Developer")).toBeVisible();
     expect(document.querySelectorAll("img[data-generated-face]")).toHaveLength(0);

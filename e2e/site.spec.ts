@@ -180,6 +180,25 @@ test("interactive operating diagrams respond to every stage", async ({ page }) =
   }
 });
 
+test("tablet scroll advances every operating story", async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 900 });
+
+  await page.goto("/solutions/patient-conversion-system");
+  await expect(page.locator(".conversion-scroll-story .scroll-story-markers")).toBeVisible();
+  await page.locator(".conversion-scroll-story [data-stage-index='5']").scrollIntoViewIfNeeded();
+  await expect(page.getByRole("region", { name: "Active conversion stage" })).toContainText("Journey measurable");
+
+  await page.goto("/solutions/growth-partnership");
+  await expect(page.locator(".growth-scroll-story .scroll-story-markers")).toBeVisible();
+  await page.locator(".growth-scroll-story [data-stage-index='4']").scrollIntoViewIfNeeded();
+  await expect(page.locator(".growth-engine-view")).toContainText("Visibility");
+
+  await page.goto("/approach");
+  await expect(page.locator(".approach-blueprint .scroll-story-markers")).toBeVisible();
+  await page.locator(".approach-blueprint [data-stage-index='5']").scrollIntoViewIfNeeded();
+  await expect(page.locator(".blueprint-view")).toContainText("Improve");
+});
+
 test("signature interactions remain complete under reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/solutions/patient-conversion-system");

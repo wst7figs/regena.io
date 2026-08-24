@@ -30,7 +30,7 @@ describe("site content", () => {
   it("contains only the confirmed launch team", () => {
     expect(teamMembers.map(({ name, role }) => [name, role])).toEqual([
       ["Luan West", "CEO & Co-Founder"],
-      ["Jean-Pierre", "COO & Co-Founder"],
+      ["Jean-Pierre van Eeden", "COO & Co-Founder"],
       ["Julian Hollen", "AI Engineer & Software Developer"],
       ["Shoham Zahir", "CSO"],
     ]);

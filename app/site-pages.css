@@ -518,6 +518,14 @@
   .role-grid { grid-template-columns: 1fr; }
 }
 
+/* Keep scroll-led stories interactive on tablets. The compact mobile layout
+   starts at 720px, where direct tabs remain the clearer control. */
+@media (min-width: 721px) and (max-width: 900px) {
+  .scroll-story { display: grid; }
+  .scroll-story-sticky, .approach-blueprint-sticky { position: sticky; top: 112px; }
+  .scroll-story-markers { display: grid; }
+}
+
 @media (max-width: 720px) {
   .shell { width: min(calc(100% - 32px),var(--shell)); }
   .interior-hero-copy h1 { font-size: clamp(3rem,15vw,5rem); }
