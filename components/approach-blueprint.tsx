@@ -23,7 +23,7 @@ export function ApproachBlueprint() {
         <div className="blueprint-grid" aria-hidden="true" />
         <span><Compass size={17} /> Active operating layer</span>
         <h3>{step.label}</h3><p>{step.detail}</p>
-        <div className="blueprint-assembly"><Layers3 size={22} /><i style={{ width: `${((active + 1) / approachSteps.length) * 100}%` }} /></div>
+        <div className="blueprint-assembly"><Layers3 size={22} /><i style={{ transform: `scaleX(${(active + 1) / approachSteps.length})` }} /></div>
         <strong><Check size={15} /> {step.summary}</strong>
       </div>
       </div>

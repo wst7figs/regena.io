@@ -52,7 +52,7 @@ export function ProofStory() {
                 <strong>{metric.value}</strong>
                 <div className="proof-metric-line" aria-hidden="true">
                   {[24, 38, 31, 54, 47, 68, 58, 78].map((height, barIndex) => (
-                    <i key={`${height}-${barIndex}`} style={{ "--metric-height": `${height + index * 2}%`, "--metric-delay": `${barIndex * 55}ms` } as React.CSSProperties} />
+                    <i key={`${height}-${barIndex}`} style={{ "--metric-scale": (height + index * 2) / 100, "--metric-delay": `${barIndex * 55}ms` } as React.CSSProperties} />
                   ))}
                 </div>
                 <small>{metric.trend}</small>

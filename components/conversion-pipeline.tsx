@@ -21,7 +21,7 @@ export function ConversionPipeline() {
     <div className="scroll-story-sticky">
       <div className="pipeline-tabs" aria-label="Patient conversion stages">{stages.map((item, index) => <button key={item.id} type="button" aria-label={`Stage ${index + 1}: ${item.label}`} aria-pressed={index === active} onClick={() => setActive(index)}><span>0{index + 1}</span>{item.label}</button>)}</div>
       <div className="pipeline-operating-view" role="region" aria-label="Active conversion stage">
-        <div className="pipeline-signal" aria-hidden="true"><i style={{ width: `${((active + 1) / stages.length) * 100}%` }} /></div>
+        <div className="pipeline-signal" aria-hidden="true"><i style={{ transform: `scaleX(${(active + 1) / stages.length})` }} /></div>
         <div className="pipeline-icon"><Icon size={24} /></div>
         <div><span>Patient event</span><p>{stage.patient}</p><span>Regena action</span><h3>{stage.title}</h3><p>{stage.action}</p></div>
         <strong><Check size={15} /> {stage.state}</strong>
