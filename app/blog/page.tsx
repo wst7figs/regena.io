@@ -9,6 +9,7 @@ import { getArticles } from "@/lib/blog";
 export const metadata: Metadata = {
   title: "Field Notes",
   description: "Practical writing on patient conversion, clinic-growth operations, and the systems connecting demand to attended consultations.",
+  alternates: { canonical: "/blog" },
 };
 
 export default async function BlogPage() {

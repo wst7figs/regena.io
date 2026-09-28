@@ -8,6 +8,16 @@ function linkLines(links: Record<string, string | undefined>) {
 }
 
 export async function POST(request: Request) {
+  const origin = request.headers.get("origin");
+  if (origin) {
+    try {
+      if (new URL(origin).host !== new URL(request.url).host) {
+        return Response.json({ ok: false, errors: ["Application origin could not be verified."] }, { status: 403 });
+      }
+    } catch {
+      return Response.json({ ok: false, errors: ["Application origin could not be verified."] }, { status: 403 });
+    }
+  }
   let form: FormData;
   try {
     form = await request.formData();
@@ -30,7 +40,7 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, errors: ["The résumé could not be stored securely. Try again."] }, { status: 503 });
   }
 
-  const teamAddress = process.env.REGENA_NOTIFICATION_EMAIL ?? "careers@regena.io";
+  const teamAddress = process.env.REGENA_NOTIFICATION_EMAIL ?? "contact@regena.io";
   const links = linkLines(application.links);
   const teamText = [
     `New Regena application: ${application.role}`,

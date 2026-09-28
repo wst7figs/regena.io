@@ -117,10 +117,10 @@ export const infrastructureLayers = [
 ] as const;
 
 export const proofMetrics = [
-  { label: "Pickup and booking", value: "+40%", trend: "Observed in the initial operating period", icon: Activity },
-  { label: "Inbound coverage", value: "Voice + chat", trend: "Built around live clinic demand", icon: CalendarCheck2 },
-  { label: "Journey coverage", value: "Connected", trend: "Response, qualification, and booking", icon: CircleDollarSign },
-  { label: "Optimization", value: "Ongoing", trend: "Reviewed and refined", icon: ChartNoAxesCombined },
+  { label: "Calls answered", value: "82%", trend: "Illustrative: 60% → 82%", icon: Activity },
+  { label: "Consultations booked", value: "31%", trend: "Illustrative: 24% → 31%", icon: CalendarCheck2 },
+  { label: "Attended consults", value: "68", trend: "Illustrative: 52 → 68 / month", icon: CircleDollarSign },
+  { label: "Response time", value: "< 1 min", trend: "Illustrative: live after-hours coverage", icon: ChartNoAxesCombined },
 ] as const;
 
 export const fitCriteria = [

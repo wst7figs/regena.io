@@ -130,7 +130,7 @@ test("proof arrives before the shortened desktop journey", async ({ page }) => {
   await page.goto("/");
 
   const proofTop = await page
-    .getByRole("region", { name: /visionmax result/i })
+    .getByRole("region", { name: /illustrative patient conversion example/i })
     .evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
   const journeyHeight = await page
     .locator(".journey-scroll-story")

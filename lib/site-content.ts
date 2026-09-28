@@ -29,6 +29,7 @@ export type TeamMember = {
   initials: string;
   ownership: string;
   linkedin: string;
+  photo: string;
 };
 
 export type ApproachStep = {
@@ -100,10 +101,10 @@ export const clinicCriteria = [
 ] as const;
 
 export const teamMembers: TeamMember[] = [
-  { name: "Luan West", role: "CEO & Co-Founder", initials: "LW", ownership: "Company direction, market, positioning, and commercial accountability.", linkedin: "https://www.linkedin.com/in/luanwest/" },
-  { name: "Jean-Pierre van Eeden", role: "COO & Co-Founder", initials: "JP", ownership: "Operations, delivery systems, implementation quality, and client success.", linkedin: "https://www.linkedin.com/in/jean-pierre-van-eeden-0a667726b/" },
-  { name: "Julian Hollen", role: "AI Engineer & Software Developer", initials: "JH", ownership: "AI systems, software development, integrations, and technical reliability.", linkedin: "https://www.linkedin.com/in/julianholien/" },
-  { name: "Shoham Zahir", role: "CSO", initials: "SZ", ownership: "Growth strategy, commercial systems, and strategic execution.", linkedin: "https://www.linkedin.com/in/shoham-zahir-77151a325/" },
+  { name: "Luan West", role: "CEO & Co-Founder", initials: "LW", ownership: "Company direction, market, positioning, and commercial accountability.", linkedin: "https://www.linkedin.com/in/luanwest/", photo: "/team/luan-west.webp" },
+  { name: "Jean-Pierre van Eeden", role: "COO & Co-Founder", initials: "JP", ownership: "Operations, delivery systems, implementation quality, and client success.", linkedin: "https://www.linkedin.com/in/jean-pierre-van-eeden-0a667726b/", photo: "/team/jean-pierre-van-eeden.webp" },
+  { name: "Julian Hollen", role: "CTO", initials: "JH", ownership: "AI systems, software development, integrations, and technical reliability.", linkedin: "https://www.linkedin.com/in/julianholien/", photo: "/team/julian-hollen.webp" },
+  { name: "Shoham Zahir", role: "CSO", initials: "SZ", ownership: "Growth strategy, commercial systems, and strategic execution.", linkedin: "https://www.linkedin.com/in/shoham-zahir-77151a325/", photo: "/team/shoham-zahir.webp" },
 ];
 
 export const footerGroups = [

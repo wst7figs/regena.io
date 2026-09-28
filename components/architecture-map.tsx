@@ -1,18 +1,20 @@
 "use client";
 
 import { animate, useInView, useMotionValue, useReducedMotion } from "motion/react";
-import { Orbit, Sparkles } from "lucide-react";
+import { Orbit } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 import { PatientSignal } from "@/components/patient-signal";
 import { infrastructureLayers } from "@/lib/home-content";
+import { useHydrated } from "@/lib/use-hydrated";
 
 const architecturePath = "M 92 164 C 204 164 190 70 326 70 C 440 70 438 164 548 164 C 652 164 648 260 792 260";
 
 export function ArchitectureMap() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
-  const reducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = useHydrated() && Boolean(prefersReducedMotion);
   const progress = useMotionValue(reducedMotion ? 1 : 0);
   const outcomeProgress = useMotionValue(0);
 
@@ -57,7 +59,6 @@ export function ArchitectureMap() {
             </article>
           );
         })}
-        <div className="architecture-pulse" aria-hidden="true"><Sparkles size={15} /></div>
       </div>
     </div>
   );

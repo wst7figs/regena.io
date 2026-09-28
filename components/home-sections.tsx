@@ -16,6 +16,7 @@ import { ProofStory } from "@/components/proof-story";
 import {
   fitCriteria,
 } from "@/lib/home-content";
+import { placeholderCaseStudy } from "@/lib/placeholder-case-study";
 import { solutions } from "@/lib/site-content";
 import { Reveal } from "@/components/reveal";
 
@@ -45,19 +46,19 @@ export function CapabilityRail() {
 
 export function ClientProofRibbon() {
   return (
-    <aside className="client-proof-ribbon" role="region" aria-label="VisionMax result">
+    <aside className="client-proof-ribbon" role="region" aria-label="Illustrative patient conversion example">
       <div className="client-proof-glow" aria-hidden="true" />
       <div className="shell client-proof-ribbon-grid">
         <div className="client-proof-client">
-          <span>Operating result</span>
-          <strong>VisionMax Eye Centre</strong>
+          <span>{placeholderCaseStudy.disclosure}</span>
+          <strong>{placeholderCaseStudy.client}</strong>
         </div>
         <div className="client-proof-result">
-          <strong>40%</strong>
-          <span>better pickup and appointment-booking rates</span>
+          <strong>{placeholderCaseStudy.result}</strong>
+          <span>{placeholderCaseStudy.resultLabel}</span>
         </div>
         <div className="client-proof-context">
-          <span>Initial operating period</span>
+          <span>{placeholderCaseStudy.period}</span>
           <a href="#story">View client story <ArrowUpRight aria-hidden="true" size={16} /></a>
         </div>
       </div>
@@ -142,7 +143,7 @@ export function OperatingModelSection() {
         </Reveal>
 
         <div className="operating-timeline">
-          <div className="operating-signal" aria-hidden="true"><i /></div>
+          <div className="operating-signal" aria-hidden="true" />
           {operatingSteps.map((step, index) => {
             const Icon = step.icon;
             return (
@@ -159,10 +160,19 @@ export function OperatingModelSection() {
           })}
         </div>
 
+      </div>
+    </section>
+  );
+}
+
+export function SolutionHandoffSection() {
+  return (
+    <section className="solution-handoff-section section-light" data-chapter="solutions" aria-labelledby="solution-handoff-title">
+      <div className="shell">
         <Reveal className="home-solution-handoff">
           <div className="home-solution-intro">
-            <span className="eyebrow eyebrow-dark">Two starting points</span>
-            <h3>Start with the constraint. Expand when the clinic is ready.</h3>
+            <span className="eyebrow">Two starting points</span>
+            <h2 id="solution-handoff-title">Start with the constraint. Expand when the clinic is ready.</h2>
           </div>
           <div className="home-solution-links">
             {solutions.map((solution, index) => (
@@ -214,6 +224,29 @@ export function BookingSection() {
             <div className="fit-footer"><ShieldCheck size={16} aria-hidden="true" /> Selective by design</div>
           </Reveal>
         </div>
+      </div>
+    </section>
+  );
+}
+
+export function QuizCtaSection() {
+  return (
+    <section className="quiz-cta-section" data-chapter="diagnostic" aria-labelledby="quiz-cta-title">
+      <div className="shell">
+        <Reveal className="quiz-cta-card">
+          <div className="quiz-cta-copy">
+            <span className="eyebrow">Not ready to choose?</span>
+            <h2 id="quiz-cta-title">Not sure which program fits your clinic?</h2>
+            <p>Answer a few practical questions about your demand, services, and current bottleneck. We&apos;ll show you the most useful starting point and the example upside behind it.</p>
+          </div>
+          <div className="quiz-cta-action">
+            <div className="quiz-route-preview" aria-hidden="true">
+              <span>Existing demand</span><i /><span>Demand + conversion</span>
+            </div>
+            <small>About five minutes · Results shown immediately</small>
+            <a className="button button-dark" href="/quiz">Take the clinic diagnostic <ArrowUpRight size={17} aria-hidden="true" /></a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

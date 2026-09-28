@@ -60,4 +60,9 @@ describe("career application validation", () => {
     const result = validateCareerApplication(application({ resume: largeFile }));
     expect(result).toEqual({ ok: false, errors: expect.arrayContaining(["Résumé must be 10 MB or smaller."]) });
   });
+
+  it("rejects automated submissions that fill the hidden company website field", () => {
+    const result = validateCareerApplication(application({ companyWebsite: "https://spam.example" }));
+    expect(result).toEqual({ ok: false, errors: expect.arrayContaining(["Application could not be accepted."]) });
+  });
 });

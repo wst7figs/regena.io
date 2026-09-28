@@ -15,9 +15,36 @@ export type Article = {
   readingMinutes: number;
   featured?: boolean;
   sections: ArticleSection[];
+  kind?: "field-note" | "press-release";
+  heroImage?: string;
+  pressReleaseBody?: string[];
+  partnerUrl?: string;
 };
 
 export const launchArticles: Article[] = [
+  {
+    slug: "regena-named-an-openai-select-partner",
+    title: "Regena Named an OpenAI Select Partner",
+    excerpt: "Regena has been named an OpenAI Select Partner within the OpenAI Partner Network, strengthening its work helping healthcare organizations deploy practical AI systems.",
+    category: "Company news",
+    publishedAt: "2026-09-08",
+    readingMinutes: 4,
+    featured: true,
+    kind: "press-release",
+    heroImage: "/press/regena-openai-select-partner.png",
+    partnerUrl: "https://openai.com/business/partners/",
+    sections: [],
+    pressReleaseBody: [
+      "Edmonton, Alberta, September 8, 2026 – Regena, an AI implementation and patient growth infrastructure company focused on healthcare organizations, today announced that it has been named an OpenAI Select Partner within the OpenAI Partner Network.",
+      "The OpenAI Partner Network is a global program for partners to build, sell, and deliver AI solutions with OpenAI. It brings together partners with deep industry expertise, delivery capabilities, and customer relationships while equipping them with resources, enablement, and support to help enterprises adopt OpenAI frontier models and products and turn them into measurable impact.",
+      "As an OpenAI Select Partner, Regena will continue working with OpenAI to help organizations build, deploy, and scale AI solutions responsibly and effectively. This work will help organizations put GPT-6 Astra to work across more of their business, using deeper reasoning and computer use to complete complex workflows and deliver finished work.",
+      "Regena focuses on helping healthcare organizations deploy AI across patient acquisition, communication, follow-up, booking, and operational workflows. Its systems include AI reception, speed-to-lead automation, missed-call recovery, automated patient follow-up, database reactivation, appointment booking, and workflow automation.",
+      "\u201cBeing named an OpenAI Select Partner is an important milestone for Regena because it strengthens the foundation behind what we are already building for healthcare organizations,\u201d said Luan West, Founder and CEO of Regena. \u201cOur goal is to make AI practical, measurable, and directly tied to growth. We want clinics to be able to deploy AI in ways that improve the patient experience, create more operational leverage, and ultimately produce better business outcomes.\u201d",
+      "Regena supports healthcare organizations including medical spas, aesthetic clinics, surgical practices, regenerative medicine clinics, and other patient-focused businesses with AI-powered systems designed to improve conversion, reduce revenue leakage, and give teams more time back.",
+      "Recent client work has included helping a surgical practice increase consultation bookings by approximately 40% after improving speed-to-lead and implementing 24/7 AI voice support. Regena has also supported a medical aesthetics business with a database of more than 5,000 past clients, where reactivation efforts contributed to an approximately 50% increase in revenue during the month of the campaign.",
+      "Looking ahead, Regena plans to expand its OpenAI-related offerings, invest further in technical delivery and AI enablement, strengthen its enterprise capabilities, and scale customer deployments across the healthcare sector.",
+    ],
+  },
   {
     slug: "why-patient-demand-disappears-between-inquiry-and-consultation",
     title: "Why patient demand disappears between inquiry and consultation",
@@ -25,7 +52,7 @@ export const launchArticles: Article[] = [
     category: "Patient journey",
     publishedAt: "2026-08-19",
     readingMinutes: 7,
-    featured: true,
+    kind: "field-note",
     sections: [
       {
         id: "demand-is-a-moving-state",
@@ -194,7 +221,10 @@ export async function getArticles(): Promise<Article[]> {
   try {
     const articles = await sanityClient.fetch<unknown[]>(articlesQuery, {}, { next: { revalidate: 300 } });
     const validArticles = articles.filter(validArticle);
-    return validArticles.length ? validArticles : launchArticles;
+    if (!validArticles.length) return launchArticles;
+    const managedSlugs = new Set(validArticles.map((article) => article.slug));
+    return [...validArticles, ...launchArticles.filter((article) => !managedSlugs.has(article.slug))]
+      .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
   } catch {
     return launchArticles;
   }

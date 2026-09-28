@@ -11,6 +11,7 @@ const routes = [
   "/careers",
   "/quiz",
   "/blog",
+  "/blog/regena-named-an-openai-select-partner",
   "/blog/why-patient-demand-disappears-between-inquiry-and-consultation",
   "/book",
   "/privacy",
@@ -67,56 +68,16 @@ test("mobile Solutions accordion exposes both engagements", async ({ page }) => 
   await expect(page.getByRole("link", { name: /^Regena Growth Partnership/ }).last()).toBeVisible();
 });
 
-test("booking preview validates and advances locally", async ({ page }) => {
+test("booking page embeds the live Booked to Built calendar", async ({ page }) => {
   await page.goto("/book");
-  await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText("Enter a valid work email.")).toBeVisible();
-
-  await page.getByLabel("Full name").fill("Luan West");
-  await page.getByLabel("Work email").fill("luan@example.com");
-  await page.getByLabel("Phone").fill("7805550100");
-  await page.getByLabel("Clinic name").fill("Example Clinic");
-  await page.getByLabel("Role").fill("Owner");
-  await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText("Step 2 of 4")).toBeVisible();
-});
-
-test("booking preview completes all four steps without transmitting personal data", async ({ page }) => {
-  const writeRequests: string[] = [];
-  page.on("request", (request) => {
-    if (!["GET", "HEAD", "OPTIONS"].includes(request.method())) {
-      writeRequests.push(`${request.method()} ${request.url()}`);
-    }
-  });
-
-  await page.goto("/book");
-  await page.getByLabel("Full name").fill("Review User");
-  await page.getByLabel("Work email").fill("review@example.com");
-  await page.getByLabel("Phone").fill("7805550100");
-  await page.getByLabel("Clinic name").fill("Review Clinic");
-  await page.getByLabel("Role").fill("Owner");
-  await page.getByRole("button", { name: "Continue" }).click();
-
-  await page.getByLabel("Clinic type").selectOption("Longevity");
-  await page.getByLabel("Number of locations").selectOption("1");
-  await page.getByLabel("Approximate monthly patient inquiries").selectOption("50-99");
-  await page.getByLabel("Yes").check();
-  await page.getByLabel("Demand and conversion").check();
-  await page.getByRole("button", { name: "Continue" }).click();
-
-  await page.locator('button[name="date"]').first().click();
-  await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText("Regena Growth Partnership")).toBeVisible();
-  await page.locator('button[name="time"]').first().click();
-  await page.getByRole("button", { name: "Finish preview" }).click();
-
-  await expect(page.getByRole("heading", { name: "Your strategy-call path is ready." })).toBeVisible();
-  await expect(page.getByText(/has not created an appointment or transmitted/i)).toBeVisible();
-  expect(writeRequests).toEqual([]);
-
-  await page.getByRole("button", { name: "Restart preview" }).click();
-  await expect(page.getByText("Step 1 of 4")).toBeVisible();
-  await expect(page.getByLabel("Full name")).toHaveValue("");
+  await expect(page.getByTitle("Book a Regena strategy call")).toHaveAttribute(
+    "src",
+    "https://go.bookedtobuilt.com/widget/booking/SSSIdBYVLlfImPfGFN02",
+  );
+  await expect(page.getByRole("link", { name: /open it in a new tab/i })).toHaveAttribute(
+    "href",
+    "https://go.bookedtobuilt.com/widget/booking/SSSIdBYVLlfImPfGFN02",
+  );
 });
 
 test("all internal links resolve without errors", async ({ page, request, baseURL }) => {
@@ -180,22 +141,25 @@ test("interactive operating diagrams respond to every stage", async ({ page }) =
   }
 });
 
-test("tablet scroll advances every operating story", async ({ page }) => {
-  await page.setViewportSize({ width: 768, height: 900 });
+test("operating stories remain compact while exposing every stage directly", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
 
   await page.goto("/solutions/patient-conversion-system");
-  await expect(page.locator(".conversion-scroll-story .scroll-story-markers")).toBeVisible();
-  await page.locator(".conversion-scroll-story [data-stage-index='5']").scrollIntoViewIfNeeded();
+  await expect(page.locator(".conversion-scroll-story .scroll-story-markers")).toBeHidden();
+  expect(await page.locator(".conversion-scroll-story").evaluate((element) => element.getBoundingClientRect().height)).toBeLessThan(900);
+  await page.getByRole("button", { name: "Stage 6: Visibility" }).click();
   await expect(page.getByRole("region", { name: "Active conversion stage" })).toContainText("Journey measurable");
 
   await page.goto("/solutions/growth-partnership");
-  await expect(page.locator(".growth-scroll-story .scroll-story-markers")).toBeVisible();
-  await page.locator(".growth-scroll-story [data-stage-index='4']").scrollIntoViewIfNeeded();
+  await expect(page.locator(".growth-scroll-story .scroll-story-markers")).toBeHidden();
+  expect(await page.locator(".growth-scroll-story").evaluate((element) => element.getBoundingClientRect().height)).toBeLessThan(900);
+  await page.getByRole("button", { name: "Growth stage 5: Visibility" }).click();
   await expect(page.locator(".growth-engine-view")).toContainText("Visibility");
 
   await page.goto("/approach");
-  await expect(page.locator(".approach-blueprint .scroll-story-markers")).toBeVisible();
-  await page.locator(".approach-blueprint [data-stage-index='5']").scrollIntoViewIfNeeded();
+  await expect(page.locator(".approach-blueprint .scroll-story-markers")).toBeHidden();
+  expect(await page.locator(".approach-blueprint").evaluate((element) => element.getBoundingClientRect().height)).toBeLessThan(900);
+  await page.locator(".blueprint-rail").getByRole("button", { name: /improve/i }).click();
   await expect(page.locator(".blueprint-view")).toContainText("Improve");
 });
 

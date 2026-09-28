@@ -1,0 +1,26 @@
+export const placeholderCaseStudy = {
+  disclosure: "Illustrative placeholder · Not a client result",
+  client: "Northline Regenerative",
+  owner: "Dr. Evan Cole",
+  ownerTitle: "Founder & Medical Director",
+  logo: "/placeholders/northline-regenerative-logo.webp",
+  result: "+37%",
+  resultLabel: "example lift in answered inbound calls",
+  period: "Illustrative 60-day operating snapshot",
+  summary: "A fictional clinic example showing how the Patient Conversion System can connect response, qualification, booking, and follow-up.",
+  quote: "“The system gave our team a clear next step for every inquiry instead of another inbox to chase.”",
+  system: [
+    "AI voice reception",
+    "Website chat and intake",
+    "Qualification routing",
+    "Live calendar booking",
+    "Reminders and follow-up",
+    "Journey reporting",
+  ],
+  metrics: [
+    { label: "Calls answered", value: "82%", trend: "Example: 60% → 82%" },
+    { label: "Consultations booked", value: "31%", trend: "Example: 24% → 31%" },
+    { label: "Attended consults", value: "68", trend: "Example: 52 → 68 / month" },
+    { label: "Response time", value: "< 1 min", trend: "Example: live coverage after hours" },
+  ],
+} as const;

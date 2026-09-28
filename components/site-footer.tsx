@@ -11,6 +11,7 @@ export function SiteFooter() {
           <Link className="wordmark" href="/">REGENA</Link>
           <p>Patient-growth infrastructure for regenerative and longevity clinics.</p>
           <a className="footer-book" href="/book">Book a strategy call <ArrowUpRight size={15} /></a>
+          <a className="footer-contact" href="mailto:contact@regena.io">contact@regena.io</a>
         </div>
         <div className="footer-groups">
           {footerGroups.map((group) => (
@@ -22,7 +23,7 @@ export function SiteFooter() {
         </div>
         <div className="footer-meta">
           <span>Edmonton · Working across North America</span>
-          <span>© 2026 Regena</span>
+          <span>© 2026 Regenix Technologies Incorporated</span>
         </div>
       </div>
     </footer>

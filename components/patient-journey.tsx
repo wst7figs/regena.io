@@ -13,6 +13,7 @@ import { JourneyScene } from "@/components/journey-scenes";
 import { PatientSignal } from "@/components/patient-signal";
 import { journeyStages } from "@/lib/home-content";
 import { getJourneyStageIndex } from "@/lib/journey-motion";
+import { useHydrated } from "@/lib/use-hydrated";
 
 const journeyPath = "M 34 518 C 154 518 154 134 296 134 S 418 510 526 510 S 648 144 752 144 S 838 322 926 322";
 
@@ -22,7 +23,9 @@ export function PatientJourney() {
   const markerRefs = useRef<Array<HTMLDivElement | null>>([]);
   const storyRef = useRef<HTMLElement>(null);
   const baseId = useId();
-  const reducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  const hasMounted = useHydrated();
+  const reducedMotion = hasMounted && Boolean(prefersReducedMotion);
   const activeStage = journeyStages[activeIndex];
   const { scrollYProgress } = useScroll({
     target: storyRef,

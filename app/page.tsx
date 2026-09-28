@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 
 import { HeroSystem } from "@/components/hero-system";
@@ -10,11 +11,17 @@ import {
   InfrastructureSection,
   OperatingModelSection,
   ProofSection,
+  QuizCtaSection,
+  SolutionHandoffSection,
 } from "@/components/home-sections";
 import { PatientJourney } from "@/components/patient-journey";
 import { Reveal } from "@/components/reveal";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (
@@ -73,7 +80,9 @@ export default function Home() {
         <InfrastructureSection />
         <ProofSection />
         <OperatingModelSection />
+        <SolutionHandoffSection />
         <BookingSection />
+        <QuizCtaSection />
       </main>
 
       <SiteFooter />

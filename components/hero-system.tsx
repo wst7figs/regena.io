@@ -19,6 +19,7 @@ import {
 import { useEffect, useRef } from "react";
 
 import { PatientSignal } from "@/components/patient-signal";
+import { useHydrated } from "@/lib/use-hydrated";
 
 const waveform = [24, 39, 18, 54, 34, 68, 43, 78, 30, 58, 36, 72, 46, 26, 52, 33, 18];
 const voiceDurations = [980, 1240, 870, 1350, 1050, 1490, 930, 1280, 1110, 1420, 910, 1330, 1020, 1470, 960, 1210, 1390];
@@ -28,7 +29,9 @@ const heroPath = "M70 220 C180 110 245 340 360 228 C455 140 485 155 555 190 C640
 
 export function HeroSystem() {
   const frameRef = useRef<HTMLDivElement | null>(null);
-  const reducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  const hasMounted = useHydrated();
+  const reducedMotion = hasMounted && Boolean(prefersReducedMotion);
   const introProgress = useMotionValue(reducedMotion ? 1 : 0);
   const { scrollYProgress } = useScroll({
     target: frameRef,

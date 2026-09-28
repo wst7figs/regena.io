@@ -60,17 +60,19 @@ export function PageCta({
   title,
   description = "Map the current constraint, then decide what deserves to be rebuilt first.",
   href = "/book",
+  label = "Book a strategy call",
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   href?: string;
+  label?: string;
 }) {
   return (
     <section className="page-cta">
       <div className="page-cta-signal" aria-hidden="true" />
       <div><span className="eyebrow eyebrow-dark">{eyebrow}</span><h2>{title}</h2><p>{description}</p></div>
-      <a className="button button-light" href={href}>Book a strategy call <ArrowUpRight size={17} /></a>
+      <a className="button button-light" href={href}>{label} <ArrowUpRight size={17} /></a>
     </section>
   );
 }

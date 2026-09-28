@@ -16,6 +16,7 @@ describe("Regena homepage", () => {
     expect(screen.getByRole("heading", { name: /one patient journey/i })).toBeVisible();
     expect(screen.getByTestId("leak-flow")).toBeVisible();
     expect(screen.getByTestId("architecture-map")).toBeVisible();
+    expect(document.querySelector(".architecture-pulse")).not.toBeInTheDocument();
     expect(document.querySelectorAll("[data-leak-point]")).toHaveLength(3);
     expect(document.querySelectorAll("[data-architecture-layer]")).toHaveLength(3);
     expect(screen.getByTestId("proof-story")).toBeVisible();
@@ -37,7 +38,9 @@ describe("Regena homepage", () => {
       "architecture",
       "proof",
       "operating-model",
+      "solutions",
       "booking",
+      "diagnostic",
     ]);
     expect(screen.getByRole("contentinfo")).toBeVisible();
   });
@@ -63,17 +66,18 @@ describe("Regena homepage", () => {
     const page = within(container);
 
     const capabilities = page.getByRole("region", { name: /regena capabilities/i });
-    const proof = page.getByRole("region", { name: /visionmax result/i });
+    const proof = page.getByRole("region", { name: /illustrative patient conversion example/i });
     expect(capabilities).toHaveTextContent(/voice/i);
     expect(capabilities).toHaveTextContent(/revenue attribution/i);
-    expect(proof).toHaveTextContent(/40%/i);
+    expect(proof).toHaveTextContent(/illustrative placeholder/i);
     expect(proof.nextElementSibling).toHaveAttribute("id", "system");
   });
 
-  it("anchors the full client story in a verified numeric outcome", () => {
+  it("anchors the full client story in a clearly marked illustrative example", () => {
     const { container } = render(<Home />);
 
-    expect(within(container).getByTestId("proof-story")).toHaveTextContent(/40%/i);
+    expect(within(container).getByTestId("proof-story")).toHaveTextContent(/Northline Regenerative/i);
+    expect(within(container).getByTestId("proof-story")).toHaveTextContent(/not a client result/i);
   });
 
   it("introduces both routed solutions", () => {
@@ -86,5 +90,13 @@ describe("Regena homepage", () => {
       screen.getAllByRole("link", { name: /growth partnership/i })
         .every((link) => link.getAttribute("href") === "/solutions/growth-partnership"),
     ).toBe(true);
+  });
+
+  it("separates solution choice into a light section and ends with the clinic diagnostic", () => {
+    const { container } = render(<Home />);
+
+    expect(container.querySelector(".solution-handoff-section")).toHaveClass("section-light");
+    expect(screen.getByRole("heading", { name: /not sure which program fits/i })).toBeVisible();
+    expect(screen.getByRole("link", { name: /take the clinic diagnostic/i })).toHaveAttribute("href", "/quiz");
   });
 });

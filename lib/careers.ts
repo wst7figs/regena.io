@@ -46,6 +46,7 @@ export function validateCareerApplication(form: FormData): ValidationResult {
   const experience = text(form, "experience", 4_000);
   const fit = text(form, "fit", 4_000);
   const consent = ["on", "true", "1"].includes(text(form, "consent", 10));
+  const companyWebsite = text(form, "companyWebsite", 500);
   const resume = form.get("resume");
   const errors: string[] = [];
 
@@ -56,6 +57,7 @@ export function validateCareerApplication(form: FormData): ValidationResult {
   if (experience.length < 20) errors.push("Tell us about your relevant experience.");
   if (fit.length < 20) errors.push("Tell us why Regena fits your work.");
   if (!consent) errors.push("Consent is required.");
+  if (companyWebsite) errors.push("Application could not be accepted.");
 
   const links: CareerApplication["links"] = {};
   for (const key of ["linkedin", "x", "instagram", "website", "portfolio"] as const) {

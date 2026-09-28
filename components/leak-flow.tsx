@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 
 import { PatientSignal } from "@/components/patient-signal";
 import { frictionPoints } from "@/lib/home-content";
+import { useHydrated } from "@/lib/use-hydrated";
 
 const leakPath = "M 42 172 C 132 172 148 172 220 172 S 306 172 378 172 S 464 172 536 172 S 620 172 706 172";
 const stages = [
@@ -18,7 +19,8 @@ const stages = [
 export function LeakFlow() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.35 });
-  const reducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = useHydrated() && Boolean(prefersReducedMotion);
   const progress = useMotionValue(reducedMotion ? 1 : 0);
   const outcomeProgress = useMotionValue(0);
 

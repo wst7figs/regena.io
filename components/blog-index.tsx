@@ -1,4 +1,5 @@
 import { ArrowUpRight, Clock3 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import type { Article } from "@/lib/blog";
@@ -30,12 +31,12 @@ export function BlogIndex({ articles }: { articles: Article[] }) {
           <p>{featured.excerpt}</p>
           <span className="blog-read">Read the field note <ArrowUpRight aria-hidden="true" size={17} /></span>
         </div>
-        <div className="blog-signal" aria-hidden="true">
+        {featured.heroImage ? <div className="blog-featured-image"><Image src={featured.heroImage} alt="" fill sizes="(max-width: 900px) 100vw, 46vw" priority /></div> : <div className="blog-signal" aria-hidden="true">
           <span>Patient intent</span>
           <div className="blog-signal-line"><i /><i /><i /><i /><i /></div>
           <ol><li>Inquiry</li><li>Response</li><li>Booking</li><li>Attendance</li><li>Outcome</li></ol>
           <strong>Find the handoff where momentum disappears.</strong>
-        </div>
+        </div>}
       </Link>
 
       <div className="blog-card-grid">

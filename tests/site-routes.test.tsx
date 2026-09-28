@@ -36,11 +36,13 @@ describe("site routes", () => {
   });
 
   it.each([["Privacy", PrivacyPage], ["Terms", TermsPage]] as const)(
-    "renders %s with one h1 and a visible legal draft notice",
+    "renders %s with one h1, an effective date, and the confirmed legal contact",
     (_, Page) => {
       const { container } = render(<Page />);
       expect(container.querySelectorAll("h1")).toHaveLength(1);
-      expect(container).toHaveTextContent(/draft for legal review/i);
+      expect(container).toHaveTextContent(/effective september 27, 2026/i);
+      expect(container.querySelector('a[href="mailto:contact@regena.io"]')).not.toBeNull();
+      expect(container).not.toHaveTextContent(/draft for legal review/i);
     },
   );
 });
