@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 import { footerGroups } from "@/lib/site-content";
+import { legalName } from "@/lib/v2-content";
 
 export function SiteFooter() {
   return (
@@ -9,8 +10,8 @@ export function SiteFooter() {
       <div className="shell footer-enterprise">
         <div className="footer-brand">
           <Link className="wordmark" href="/">REGENA</Link>
-          <p>Patient-growth infrastructure for regenerative and longevity clinics.</p>
-          <a className="footer-book" href="/book">Book a strategy call <ArrowUpRight size={15} /></a>
+          <p>Patients in your chair for med spas and aesthetic clinics. Never billed for a no-show.</p>
+          <a className="footer-book" href="/apply">Check if your area is open <ArrowUpRight size={15} /></a>
           <a className="footer-contact" href="mailto:contact@regena.io">contact@regena.io</a>
         </div>
         <div className="footer-groups">
@@ -22,8 +23,8 @@ export function SiteFooter() {
           ))}
         </div>
         <div className="footer-meta">
-          <span>Edmonton · Working across North America</span>
-          <span>© 2026 Regena Technologies Inc.</span>
+          <span>Edmonton, Alberta · Working with clinics across Canada and the US</span>
+          <span>© 2026 {legalName}</span>
         </div>
       </div>
     </footer>

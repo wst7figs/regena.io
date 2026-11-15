@@ -15,10 +15,7 @@ describe("site primitives", () => {
     );
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/choose the system/i);
-    expect(screen.getByRole("link", { name: /book a strategy call/i })).toHaveAttribute(
-      "href",
-      "/book",
-    );
+    expect(screen.getByRole("link", { name: /book a strategy call/i })).toHaveAttribute("href", "/book");
   });
 
   it("keeps calls to action and outcome caveats explicit", () => {
@@ -28,10 +25,7 @@ describe("site primitives", () => {
         <ResultNote>Observed client results are not guarantees.</ResultNote>
       </>,
     );
-    expect(screen.getByRole("link", { name: /book a strategy call/i })).toHaveAttribute(
-      "href",
-      "/book",
-    );
+    expect(screen.getByRole("link", { name: /check if your area is open/i })).toHaveAttribute("href", "/apply");
     expect(screen.getByText(/not guarantees/i)).toBeVisible();
   });
 });

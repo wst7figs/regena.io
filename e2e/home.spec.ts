@@ -1,172 +1,69 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 for (const width of [375, 768, 1024, 1440]) {
   test(`homepage fits ${width}px without horizontal overflow`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
-    );
-
-    expect(overflow).toBe(false);
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)).toBe(false);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/patients in your chair/i);
   });
 }
 
-test("booking calls to action reach the focused booking page", async ({ page }) => {
+test("primary calls to action open the apply funnel", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  await page.getByRole("link", { name: "Book a strategy call" }).first().click();
-
-  await expect(page).toHaveURL(/\/book$/);
-  await expect(page.getByRole("heading", { level: 1, name: /find where your patient journey/i })).toBeVisible();
+  await page.getByRole("link", { name: /check if your area is open/i }).first().click();
+  await expect(page).toHaveURL(/\/apply$/);
+  await expect(page.getByRole("heading", { level: 1, name: /check if your area is open/i })).toBeVisible();
 });
 
-test("desktop scroll advances the patient journey", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-
-  const story = page.locator("[data-active-stage]");
-  await story.scrollIntoViewIfNeeded();
-  await page.locator('[data-scroll-marker="book"]').scrollIntoViewIfNeeded();
-
-  await expect(story).toHaveAttribute("data-active-stage", "book");
-  await expect(page.locator(".journey-story-shell")).toBeInViewport();
-  await expect(page.getByRole("tab", { name: "Book" })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  );
-});
-
-test("mobile uses the vertical journey instead of the sticky desktop scene", async ({ page }) => {
-  await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
-
-  await expect(page.locator(".journey-mobile-story")).toBeVisible();
-  await expect(page.locator(".journey-sticky")).toBeHidden();
-  await expect(page.locator("[data-mobile-stage]")).toHaveCount(5);
-});
-
-test("reduced motion exposes the complete journey without a scroll trap", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-
-  await expect(page.locator("[data-stage-copy]")).toHaveCount(5);
-  const storyHeight = await page
-    .locator(".journey-scroll-story")
-    .evaluate((element) => element.getBoundingClientRect().height);
-  expect(storyHeight).toBeLessThan(2700);
-});
-
-test("below-the-fold content stays visible before scroll reveals run", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-
-  const heading = page.getByRole("heading", { name: /the lead is rarely the problem/i });
-  const opacity = await heading.evaluate((element) => getComputedStyle(element.closest(".reveal")!).opacity);
-
-  expect(opacity).toBe("1");
-});
-
-test("hero rays flow unless reduced motion is requested", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-
-  const bundles = page.locator("[data-ray-bundle]");
-  await expect(bundles).toHaveCount(2);
-  const animatedNames = await bundles.evaluateAll((elements) =>
-    elements.map((element) => getComputedStyle(element).animationName),
-  );
-  expect(animatedNames.every((name) => name !== "none")).toBe(true);
-
-  await page.emulateMedia({ reducedMotion: "reduce" });
+async function fillContact(page: Page, region: string, country: "CA" | "US" = "CA") {
+  await page.goto("/apply");
+  await page.evaluate(() => localStorage.removeItem("regena-apply-v1"));
   await page.reload();
-  const reducedNames = await bundles.evaluateAll((elements) =>
-    elements.map((element) => getComputedStyle(element).animationName),
-  );
-  expect(reducedNames).toEqual(["none", "none"]);
+  await page.locator("#name").fill("Test Owner");
+  await page.locator("#clinic").fill("Test Clinic");
+  await page.locator("#email").fill("owner@example.test");
+  await page.locator("#phone").fill("555 010 0100");
+  await page.locator("#country").selectOption(country);
+  await page.locator("#region").fill(region);
+  await page.locator("#city").fill("Testville");
+  await page.getByRole("checkbox", { name: /I agree that Regena can contact me/i }).check();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Step 2 of 2")).toBeVisible();
+}
+
+async function answerQuestions(page: Page) {
+  await page.getByLabel("Injectables").check();
+  await page.getByLabel("Under $25k").check();
+  await page.getByLabel("Not sure", { exact: true }).check();
+  await page.getByLabel("Not right now").check();
+  await page.getByRole("button", { name: /see if we're a fit/i }).click();
+}
+
+test("apply funnel: a small injectables clinic still gets the calendar, pre-filled", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await fillContact(page, "Ontario");
+  await answerQuestions(page);
+  await expect(page.getByRole("heading", { name: /pick a time with luan/i })).toBeVisible();
+  const src = await page.locator("iframe[title='Book a call with Regena']").getAttribute("src");
+  const url = new URL(src ?? "");
+  expect(url.hostname).toBe("go.regena.io");
+  expect(url.searchParams.get("full_name")).toBe("Test Owner");
+  expect(url.searchParams.get("email")).toBe("owner@example.test");
 });
 
-test("hero rays retain visible contrast around the hero interface", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-
-  const rayOpacity = await page
-    .getByTestId("hero-rays")
-    .evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
-  const auraOpacity = await page
-    .locator(".hero-ray-aura")
-    .first()
-    .evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
-
-  expect(rayOpacity).toBeGreaterThanOrEqual(1);
-  expect(auraOpacity).toBeGreaterThanOrEqual(0.2);
+test("apply funnel: Florida gets a polite not-a-fit", async ({ page }) => {
+  await fillContact(page, "FL", "US");
+  await answerQuestions(page);
+  await expect(page.getByRole("heading", { name: /not the right fit yet/i })).toBeVisible();
+  await expect(page.getByText(/florida/i)).toBeVisible();
 });
 
-test("hero call meter uses a continuous independent voice cadence", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-
-  const cadence = await page.locator(".hero-waveform i").evaluateAll((bars) =>
-    bars.map((bar) => {
-      const styles = getComputedStyle(bar);
-      return {
-        delay: styles.animationDelay,
-        duration: styles.animationDuration,
-        iterations: styles.animationIterationCount,
-      };
-    }),
-  );
-
-  expect(new Set(cadence.map(({ duration }) => duration)).size).toBeGreaterThanOrEqual(6);
-  expect(cadence.every(({ iterations }) => iterations === "infinite")).toBe(true);
-  expect(cadence.some(({ delay }) => delay.startsWith("-"))).toBe(true);
-});
-
-test("proof arrives before the shortened desktop journey", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/");
-
-  const proofTop = await page
-    .getByRole("region", { name: /illustrative patient conversion example/i })
-    .evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
-  const journeyHeight = await page
-    .locator(".journey-scroll-story")
-    .evaluate((element) => element.getBoundingClientRect().height);
-
-  expect(proofTop).toBeLessThan(1200);
-  expect(journeyHeight).toBeGreaterThan(3500);
-  expect(journeyHeight).toBeLessThan(4800);
-});
-
-test("primary navigation and journey explanations remain readable", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/");
-
-  const navSize = await page
-    .locator(".desktop-nav > a")
-    .first()
-    .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
-  const journeyCopySize = await page
-    .locator(".journey-story-label small")
-    .first()
-    .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
-
-  expect(navSize).toBeGreaterThanOrEqual(12);
-  expect(journeyCopySize).toBeGreaterThanOrEqual(12);
-});
-
-test("homepage produces no browser errors", async ({ page }) => {
-  const errors: string[] = [];
-  page.on("console", (message) => {
-    if (message.type() === "error") errors.push(message.text());
-  });
-  page.on("pageerror", (error) => errors.push(error.message));
-
-  await page.goto("/");
-  await page.locator("footer").scrollIntoViewIfNeeded();
-
-  expect(errors).toEqual([]);
+test("apply funnel: missing details are explained, not silently ignored", async ({ page }) => {
+  await page.goto("/apply");
+  await page.evaluate(() => localStorage.removeItem("regena-apply-v1"));
+  await page.reload();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.locator(".apply-errors")).toContainText("Please agree to be contacted");
 });

@@ -1,5 +1,6 @@
 export type SiteRoute =
   | "/"
+  | "/apply"
   | "/solutions"
   | "/solutions/patient-conversion-system"
   | "/solutions/growth-partnership"
@@ -39,18 +40,13 @@ export type ApproachStep = {
   detail: string;
 };
 
+// Retired v1 pages (/solutions*, /approach, /clinics, /outcomes, /quiz) redirect to "/" in next.config.ts.
 export const siteRoutes: SiteRoute[] = [
   "/",
-  "/solutions",
-  "/solutions/patient-conversion-system",
-  "/solutions/growth-partnership",
-  "/approach",
-  "/clinics",
-  "/outcomes",
+  "/apply",
   "/company",
   "/careers",
   "/blog",
-  "/quiz",
   "/book",
   "/privacy",
   "/terms",
@@ -76,11 +72,11 @@ export const solutions = [
 ] as const satisfies readonly Solution[];
 
 export const siteNav = [
-  { label: "Solutions", href: "/solutions", children: solutions },
-  { label: "Our Approach", href: "/approach" },
-  { label: "For Clinics", href: "/clinics" },
-  { label: "Outcomes", href: "/outcomes" },
-  { label: "Blog", href: "/blog" },
+  { label: "How it works", href: "/#how" },
+  { label: "What counts", href: "/#counts" },
+  { label: "Who it's for", href: "/#fit" },
+  { label: "FAQ", href: "/#faq" },
+  { label: "Company", href: "/company" },
 ] as const;
 
 export const approachSteps: ApproachStep[] = [
@@ -109,23 +105,21 @@ export const teamMembers: TeamMember[] = [
 
 export const footerGroups = [
   {
-    label: "Solutions",
+    label: "Program",
     links: [
-      { label: "Patient Conversion System", href: "/solutions/patient-conversion-system" },
-      { label: "Growth Partnership", href: "/solutions/growth-partnership" },
-      { label: "Compare Solutions", href: "/solutions" },
+      { label: "How it works", href: "/#how" },
+      { label: "What counts", href: "/#counts" },
+      { label: "Who it's for", href: "/#fit" },
+      { label: "FAQ", href: "/#faq" },
+      { label: "Check your area", href: "/apply" },
     ],
   },
   {
-    label: "Explore",
+    label: "Company",
     links: [
-      { label: "Our Approach", href: "/approach" },
-      { label: "For Clinics", href: "/clinics" },
-      { label: "Outcomes", href: "/outcomes" },
-      { label: "Company", href: "/company" },
+      { label: "About Regena", href: "/company" },
       { label: "Careers", href: "/careers" },
       { label: "Blog", href: "/blog" },
-      { label: "Clinic Diagnostic", href: "/quiz" },
     ],
   },
   {

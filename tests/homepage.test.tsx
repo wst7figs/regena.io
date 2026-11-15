@@ -3,100 +3,43 @@ import { describe, expect, it } from "vitest";
 
 import Home from "@/app/page";
 
-describe("Regena homepage", () => {
-  it("renders the complete homepage architecture with routed booking", () => {
+describe("Regena homepage (v2)", () => {
+  it("leads with patients in the chair for med spas and aesthetic clinics", () => {
     render(<Home />);
-
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/patient demand/i);
-    expect(screen.getByTestId("hero-rays")).toBeVisible();
-    expect(document.querySelectorAll("[data-ray-bundle]")).toHaveLength(2);
-    expect(document.querySelectorAll("[data-ambient-field]")).toHaveLength(0);
-    expect(document.querySelectorAll("#book")).toHaveLength(0);
-    expect(screen.getByRole("heading", { name: /built like infrastructure/i })).toBeVisible();
-    expect(screen.getByRole("heading", { name: /one patient journey/i })).toBeVisible();
-    expect(screen.getByTestId("leak-flow")).toBeVisible();
-    expect(screen.getByTestId("architecture-map")).toBeVisible();
-    expect(document.querySelector(".architecture-pulse")).not.toBeInTheDocument();
-    expect(document.querySelectorAll("[data-leak-point]")).toHaveLength(3);
-    expect(document.querySelectorAll("[data-architecture-layer]")).toHaveLength(3);
-    expect(screen.getByTestId("proof-story")).toBeVisible();
-    expect(document.querySelectorAll("[data-proof-metric]")).toHaveLength(4);
-    expect(
-      Array.from(document.querySelectorAll("[data-operating-step]")).map((node) =>
-        node.getAttribute("data-operating-step"),
-      ),
-    ).toEqual(["build", "operate", "improve"]);
-    expect(screen.getByTestId("booking-resolution")).toBeVisible();
-    expect(
-      Array.from(document.querySelectorAll("[data-chapter]")).map((node) =>
-        node.getAttribute("data-chapter"),
-      ),
-    ).toEqual([
-      "hero",
-      "journey",
-      "leakage",
-      "architecture",
-      "proof",
-      "operating-model",
-      "solutions",
-      "booking",
-      "diagnostic",
-    ]);
-    expect(screen.getByRole("contentinfo")).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/patients in your chair/i);
+    expect(screen.getAllByText(/med spas and aesthetic clinics/i).length).toBeGreaterThan(0);
   });
 
-  it("routes every booking call to action to the booking section", () => {
+  it("keeps the ICP broad and never makes claims that contradict older partner terms", () => {
+    const { container } = render(<Home />);
+    const text = container.textContent ?? "";
+    expect(text).not.toMatch(/only pay when|nothing else|no retainer|injectable-only|\$100 a day|laser clinics and med spas/i);
+  });
+
+  it("routes every primary call to action to the apply funnel", () => {
     render(<Home />);
-
-    const bookingLinks = screen.getAllByRole("link", { name: /book a strategy call/i });
-    expect(bookingLinks.length).toBeGreaterThanOrEqual(3);
-    expect(bookingLinks.every((link) => link.getAttribute("href") === "/book")).toBe(true);
+    const ctas = screen.getAllByRole("link", { name: /check (if )?your area/i });
+    expect(ctas.length).toBeGreaterThanOrEqual(2);
+    ctas.forEach((link) => expect(link).toHaveAttribute("href", "/apply"));
   });
 
-  it("makes booking the primary hero action", () => {
+  it("never shows Regena prices, client results or the retired positioning", () => {
     const { container } = render(<Home />);
-
-    const hero = container.querySelector(".hero-section");
-    expect(hero?.querySelector(".button-primary")).toHaveTextContent(/book a strategy call/i);
-    expect(hero?.querySelector(".button-secondary")).toHaveTextContent(/see how the system works/i);
+    const text = container.textContent ?? "";
+    expect(text).not.toMatch(/\$750|\$75\b|\$2,?000/);
+    expect(text).not.toMatch(/regenerative|longevity|Northline|Regenix/i);
   });
 
-  it("surfaces proof and concrete capabilities before the interactive journey", () => {
-    const { container } = render(<Home />);
-    const page = within(container);
-
-    const capabilities = page.getByRole("region", { name: /regena capabilities/i });
-    const proof = page.getByRole("region", { name: /illustrative patient conversion example/i });
-    expect(capabilities).toHaveTextContent(/voice/i);
-    expect(capabilities).toHaveTextContent(/revenue attribution/i);
-    expect(proof).toHaveTextContent(/illustrative placeholder/i);
-    expect(proof.nextElementSibling).toHaveAttribute("id", "system");
-  });
-
-  it("anchors the full client story in a clearly marked illustrative example", () => {
-    const { container } = render(<Home />);
-
-    expect(within(container).getByTestId("proof-story")).toHaveTextContent(/Northline Regenerative/i);
-    expect(within(container).getByTestId("proof-story")).toHaveTextContent(/not a client result/i);
-  });
-
-  it("introduces both routed solutions", () => {
+  it("spells out what counts and that no-shows are never billed", () => {
     render(<Home />);
-    expect(
-      screen.getAllByRole("link", { name: /patient conversion system/i })
-        .every((link) => link.getAttribute("href") === "/solutions/patient-conversion-system"),
-    ).toBe(true);
-    expect(
-      screen.getAllByRole("link", { name: /growth partnership/i })
-        .every((link) => link.getAttribute("href") === "/solutions/growth-partnership"),
-    ).toBe(true);
+    const counts = document.getElementById("counts");
+    expect(counts).not.toBeNull();
+    expect(within(counts as HTMLElement).getByText(/you never pay for a no-show/i)).toBeVisible();
+    expect(within(counts as HTMLElement).getByText(/marks each appointment as showed or no-show/i)).toBeVisible();
   });
 
-  it("separates solution choice into a light section and ends with the clinic diagnostic", () => {
-    const { container } = render(<Home />);
-
-    expect(container.querySelector(".solution-handoff-section")).toHaveClass("section-light");
-    expect(screen.getByRole("heading", { name: /not sure which program fits/i })).toBeVisible();
-    expect(screen.getByRole("link", { name: /take the clinic diagnostic/i })).toHaveAttribute("href", "/quiz");
+  it("has the anchor sections the navigation points to", () => {
+    render(<Home />);
+    for (const id of ["how", "counts", "fit", "faq"]) expect(document.getElementById(id)).not.toBeNull();
   });
 });

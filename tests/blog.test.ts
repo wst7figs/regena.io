@@ -20,4 +20,9 @@ describe("launch Blog content", () => {
     expect(release.pressReleaseBody?.join(" ")).toContain("put GPT-6 Astra to work");
     expect(release.pressReleaseBody?.join(" ")).not.toContain("GPT-5.6");
   });
+
+  it("keeps the press release free of client-result claims and off-target clinic types", () => {
+    const body = launchArticles[0].pressReleaseBody?.join(" ") ?? "";
+    expect(body).not.toMatch(/\d+\s?%|regenerative|longevity/i);
+  });
 });

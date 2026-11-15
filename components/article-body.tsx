@@ -44,9 +44,9 @@ export function ArticleBody({ article }: { article: Article }) {
             </section>
           ))}
           <aside className="article-cta">
-            <span>Put the journey on the table</span>
-            <h2>Find the operating constraint before prescribing another tool.</h2>
-            <Link className="button button-light" href="/quiz">Take the clinic diagnostic <ArrowUpRight aria-hidden="true" size={16} /></Link>
+            <span>One clinic per area</span>
+            <h2>Want more patients in your chair, not just more leads?</h2>
+            <Link className="button button-light" href="/apply">Check if your area is open <ArrowUpRight aria-hidden="true" size={16} /></Link>
           </aside>
         </div>
       </div>}

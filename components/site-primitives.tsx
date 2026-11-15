@@ -58,9 +58,9 @@ export function ResultNote({ children }: { children: ReactNode }) {
 export function PageCta({
   eyebrow = "A focused first conversation",
   title,
-  description = "Map the current constraint, then decide what deserves to be rebuilt first.",
-  href = "/book",
-  label = "Book a strategy call",
+  description = "Answer a few quick questions. If it's a fit, you'll pick a time with Luan right away.",
+  href = "/apply",
+  label = "Check if your area is open",
 }: {
   eyebrow?: string;
   title: string;

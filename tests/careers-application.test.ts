@@ -9,7 +9,7 @@ function application(overrides: Record<string, string | File> = {}) {
     email: "avery@example.com",
     phone: "+1 555 555 0198",
     location: "Toronto · ET",
-    role: "AI Systems Developer",
+    role: "Social Media Intern",
     linkedin: "https://www.linkedin.com/in/avery-smith",
     x: "",
     instagram: "",
@@ -30,7 +30,7 @@ describe("career application validation", () => {
     const result = validateCareerApplication(application());
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value.role).toBe("AI Systems Developer");
+    expect(result.value.role).toBe("Social Media Intern");
     expect(result.value.resume.name).toBe("avery-resume.pdf");
     expect(result.value.links).toEqual({
       linkedin: "https://www.linkedin.com/in/avery-smith",
