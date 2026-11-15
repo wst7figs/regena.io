@@ -23,7 +23,7 @@ export function SiteFooter() {
         </div>
         <div className="footer-meta">
           <span>Edmonton · Working across North America</span>
-          <span>© 2026 Regenix Technologies Incorporated</span>
+          <span>© 2026 Regena Technologies Inc.</span>
         </div>
       </div>
     </footer>

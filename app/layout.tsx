@@ -50,7 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Regena",
-    legalName: "Regenix Technologies Incorporated",
+    legalName: "Regena Technologies Inc.",
     url: "https://regena.io",
     email: "contact@regena.io",
     address: { "@type": "PostalAddress", addressRegion: "Alberta", addressCountry: "CA" },

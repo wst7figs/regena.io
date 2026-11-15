@@ -72,11 +72,11 @@ test("booking page embeds the live Booked to Built calendar", async ({ page }) =
   await page.goto("/book");
   await expect(page.getByTitle("Book a Regena strategy call")).toHaveAttribute(
     "src",
-    "https://go.bookedtobuilt.com/widget/booking/SSSIdBYVLlfImPfGFN02",
+    "https://go.regena.io/widget/booking/DPLeuNxOGB7PkoF1eg6u",
   );
   await expect(page.getByRole("link", { name: /open it in a new tab/i })).toHaveAttribute(
     "href",
-    "https://go.bookedtobuilt.com/widget/booking/SSSIdBYVLlfImPfGFN02",
+    "https://go.regena.io/widget/booking/DPLeuNxOGB7PkoF1eg6u",
   );
 });
 
