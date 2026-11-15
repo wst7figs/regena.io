@@ -1,4 +1,4 @@
-const bookingUrl = "https://go.bookedtobuilt.com/widget/booking/SSSIdBYVLlfImPfGFN02";
+const bookingUrl = "https://go.regena.io/widget/booking/DPLeuNxOGB7PkoF1eg6u";
 
 export function BookingWidget() {
   return (
