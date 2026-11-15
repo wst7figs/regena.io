@@ -78,3 +78,14 @@ test("booking page embeds the live Regena calendar", async ({ page }) => {
   await page.goto("/book");
   await expect(page.locator("iframe[title='Book a call with Regena']")).toHaveAttribute("src", /go\.regena\.io\/widget\/booking\//);
 });
+
+test("ad campaign tags from the landing page reach the calendar on a later page", async ({ page }) => {
+  await page.goto("/?utm_source=facebook&utm_campaign=fall&fbclid=abc123");
+  await page.waitForLoadState("networkidle");
+  await page.goto("/book");
+  const iframe = page.locator("iframe[title='Book a call with Regena']");
+  await expect(iframe).toHaveAttribute("src", /utm_source=facebook/);
+  const url = new URL((await iframe.getAttribute("src")) ?? "");
+  expect(url.searchParams.get("utm_campaign")).toBe("fall");
+  expect(url.searchParams.get("fbclid")).toBe("abc123");
+});

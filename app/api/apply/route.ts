@@ -1,4 +1,5 @@
 import { parseAnswers, parseContact, qualify } from "@/lib/apply";
+import { pickAttribution } from "@/lib/attribution";
 import { escapeHtml, sendEmail } from "@/lib/email";
 import { applyQuestions, type ApplyAnswers } from "@/lib/v2-content";
 
@@ -38,12 +39,17 @@ export async function POST(request: Request) {
   const contact = parseContact(body.contact);
   if (!contact.ok) return Response.json({ ok: false, errors: contact.errors }, { status: 400 });
 
+  const attribution = pickAttribution(body.attribution);
+  const sourceLine = Object.keys(attribution).length
+    ? `\n\nSource: ${Object.entries(attribution).map(([key, value]) => `${key}=${value}`).join(" · ")}`
+    : "";
+
   const teamAddress = process.env.REGENA_NOTIFICATION_EMAIL ?? "contact@regena.io";
   const who = `${contact.value.name} · ${contact.value.clinic} · ${contact.value.city}, ${contact.value.region} ${contact.value.country}`;
   const contactLines = `Email: ${contact.value.email}\nPhone: ${contact.value.phone}${contact.value.website ? `\nWebsite: ${contact.value.website}` : ""}`;
 
   if (body.step === "contact") {
-    const webhook = await forward({ step: "contact", ...contact.value, consent: true, consentText, submittedAt: new Date().toISOString() });
+    const webhook = await forward({ step: "contact", ...contact.value, ...attribution, consent: true, consentText, submittedAt: new Date().toISOString() });
     return Response.json({ ok: true, webhook });
   }
 
@@ -55,7 +61,7 @@ export async function POST(request: Request) {
   const answerLines = (Object.keys(answers.value) as (keyof ApplyAnswers)[])
     .map((key) => `${applyQuestions[key].label}\n  ${answerLabel(key, answers.value[key])}`)
     .join("\n");
-  const text = `New Regena application: ${label}\n\n${who}\n${contactLines}\n\n${answerLines}`;
+  const text = `New Regena application: ${label}\n\n${who}\n${contactLines}\n\n${answerLines}${sourceLine}`;
 
   const [email, webhook] = await Promise.all([
     sendEmail({
@@ -69,6 +75,7 @@ export async function POST(request: Request) {
       step: "answers",
       ...contact.value,
       ...answers.value,
+      ...attribution,
       treatmentLabel: answerLabel("treatment", answers.value.treatment),
       revenueLabel: answerLabel("revenue", answers.value.revenue),
       pastPatientsLabel: answerLabel("pastPatients", answers.value.pastPatients),

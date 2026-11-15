@@ -6,6 +6,7 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 import { BookingWidget } from "@/components/booking-widget";
 import { trackMeta } from "@/components/meta-pixel";
 import { type ApplyContact, type Verdict } from "@/lib/apply";
+import { readAttribution } from "@/lib/attribution";
 import { applyQuestions, type ApplyAnswers } from "@/lib/v2-content";
 
 type Step = "contact" | "questions" | "result";
@@ -76,7 +77,7 @@ export function ApplyFunnel() {
     event.preventDefault();
     setBusy(true);
     setErrors([]);
-    const result = await submit({ step: "contact", contact: draft.contact, hp }).catch(() => ({ ok: false, errors: ["Something went wrong. Please try again."] }));
+    const result = await submit({ step: "contact", contact: draft.contact, attribution: readAttribution(), hp }).catch(() => ({ ok: false, errors: ["Something went wrong. Please try again."] }));
     setBusy(false);
     if (!result.ok) return setErrors(result.errors ?? []);
     trackMeta("Lead");
@@ -87,7 +88,7 @@ export function ApplyFunnel() {
     event.preventDefault();
     setBusy(true);
     setErrors([]);
-    const result = await submit({ step: "answers", contact: draft.contact, answers: draft.answers, hp }).catch(() => ({ ok: false, errors: ["Something went wrong. Please try again."], verdict: undefined }));
+    const result = await submit({ step: "answers", contact: draft.contact, answers: draft.answers, attribution: readAttribution(), hp }).catch(() => ({ ok: false, errors: ["Something went wrong. Please try again."], verdict: undefined }));
     setBusy(false);
     if (!result.ok || !result.verdict) return setErrors(result.errors ?? []);
     setVerdict(result.verdict);

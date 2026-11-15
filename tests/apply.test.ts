@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { bookingSrc } from "@/components/booking-widget";
 import { parseAnswers, parseContact, qualify } from "@/lib/apply";
+import { pickAttribution } from "@/lib/attribution";
 import type { ApplyAnswers } from "@/lib/v2-content";
 
 const good: ApplyAnswers = { treatment: "laser", revenue: "50-100k", pastPatients: "1000-plus", adBudget: "yes" };
@@ -15,6 +16,15 @@ describe("booking calendar prefill", () => {
     expect(url.searchParams.get("phone")).toBe("780 555 0101");
     expect(url.searchParams.has("website")).toBe(false);
     expect(bookingSrc()).not.toContain("?");
+  });
+
+  it("passes ad campaign tags to the calendar and ignores anything else", () => {
+    const attribution = pickAttribution(new URLSearchParams("utm_source=facebook&utm_campaign=fall&fbclid=abc&token=secret"));
+    expect(attribution).toEqual({ utm_source: "facebook", utm_campaign: "fall", fbclid: "abc" });
+    const url = new URL(bookingSrc(undefined, attribution));
+    expect(url.searchParams.get("utm_campaign")).toBe("fall");
+    expect(url.searchParams.get("fbclid")).toBe("abc");
+    expect(url.searchParams.has("token")).toBe(false);
   });
 });
 

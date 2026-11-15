@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
 
+import { AttributionCapture } from "@/components/attribution-capture";
 import { MetaPixel } from "@/components/meta-pixel";
 
 import "./globals.css";
@@ -60,7 +61,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   };
   return (
     <html lang="en" className={`${instrumentSans.variable} ${ibmPlexMono.variable}`} data-scroll-behavior="smooth">
-      <body suppressHydrationWarning><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />{children}<MetaPixel /></body>
+      <body suppressHydrationWarning><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />{children}<AttributionCapture /><MetaPixel /></body>
     </html>
   );
 }

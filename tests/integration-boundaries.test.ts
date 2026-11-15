@@ -30,13 +30,15 @@ describe("production integration boundaries", () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response("ok", { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
 
-    const response = await post({ step: "answers", contact, answers });
+    const response = await post({ step: "answers", contact, answers, attribution: { utm_source: "facebook", fbclid: "abc123", evil: "x" } });
     const json = await response.json();
     expect(json).toMatchObject({ ok: true, verdict: { fit: true }, email: "unconfigured", webhook: "sent" });
 
     const payload = JSON.parse(fetchMock.mock.calls[0][1].body as string);
     expect(payload).toMatchObject({ step: "answers", clinic: "Glow Clinic", treatment: "body", treatmentLabel: "Body contouring or fat dissolving", fit: true, consent: true });
     expect(payload.consentText).toMatch(/Reply STOP/);
+    expect(payload).toMatchObject({ utm_source: "facebook", fbclid: "abc123" });
+    expect(payload).not.toHaveProperty("evil");
   });
 
   it("drops spam-trap submissions without forwarding them", async () => {
