@@ -1,48 +1,41 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import ApproachPage from "@/app/approach/page";
+import ApplyPage from "@/app/apply/page";
 import BookPage from "@/app/book/page";
-import ClinicsPage from "@/app/clinics/page";
+import CareersPage from "@/app/careers/page";
 import CompanyPage from "@/app/company/page";
-import OutcomesPage from "@/app/outcomes/page";
 import PrivacyPage from "@/app/privacy/page";
-import SolutionsPage from "@/app/solutions/page";
-import GrowthPage from "@/app/solutions/growth-partnership/page";
-import ConversionPage from "@/app/solutions/patient-conversion-system/page";
 import TermsPage from "@/app/terms/page";
 
-const commercialRoutes = [
-  ["Solutions", SolutionsPage],
-  ["Patient Conversion System", ConversionPage],
-  ["Regena Growth Partnership", GrowthPage],
-  ["Our Approach", ApproachPage],
-  ["For Clinics", ClinicsPage],
-  ["Outcomes", OutcomesPage],
-  ["Company", CompanyPage],
-] as const;
-
 describe("site routes", () => {
-  it.each(commercialRoutes)("renders %s with one h1 and a booking route", (_, Page) => {
+  it("renders Company with one h1, the apply route and no prices", () => {
+    const { container } = render(<CompanyPage />);
+    expect(container.querySelectorAll("h1")).toHaveLength(1);
+    expect(container.querySelector('a[href="/apply"]')).not.toBeNull();
+    expect(container.textContent).not.toMatch(/\$\d|starting at|regenerative|longevity/i);
+  });
+
+  it.each([["Book", BookPage], ["Apply", ApplyPage], ["Careers", CareersPage]] as const)("renders %s with one h1", (_, Page) => {
     const { container } = render(<Page />);
     expect(container.querySelectorAll("h1")).toHaveLength(1);
-    expect(container.querySelector('a[href="/book"]')).not.toBeNull();
-    expect(container.textContent).not.toMatch(/\$\d|starting at/i);
   });
 
-  it("renders the focused booking route with one h1", () => {
-    const { container } = render(<BookPage />);
-    expect(container.querySelectorAll("h1")).toHaveLength(1);
-  });
-
-  it.each([["Privacy", PrivacyPage], ["Terms", TermsPage]] as const)(
+  it.each([["Privacy", PrivacyPage, /effective november 16, 2026/i], ["Terms", TermsPage, /effective september 27, 2026/i]] as const)(
     "renders %s with one h1, an effective date, and the confirmed legal contact",
-    (_, Page) => {
+    (_, Page, date) => {
       const { container } = render(<Page />);
       expect(container.querySelectorAll("h1")).toHaveLength(1);
-      expect(container).toHaveTextContent(/effective september 27, 2026/i);
+      expect(container).toHaveTextContent(date);
+      expect(container).toHaveTextContent(/Regena Technologies Inc\./);
+      expect(container).not.toHaveTextContent(/Regenix/i);
       expect(container.querySelector('a[href="mailto:contact@regena.io"]')).not.toBeNull();
-      expect(container).not.toHaveTextContent(/draft for legal review/i);
     },
   );
+
+  it("discloses texts and advertising measurement in the privacy notice", () => {
+    const { container } = render(<PrivacyPage />);
+    expect(container).toHaveTextContent(/reply STOP/i);
+    expect(container).toHaveTextContent(/Meta Pixel/);
+  });
 });

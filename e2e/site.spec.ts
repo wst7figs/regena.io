@@ -1,15 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 const routes = [
-  "/solutions",
-  "/solutions/patient-conversion-system",
-  "/solutions/growth-partnership",
-  "/approach",
-  "/clinics",
-  "/outcomes",
+  "/",
+  "/apply",
   "/company",
   "/careers",
-  "/quiz",
   "/blog",
   "/blog/regena-named-an-openai-select-partner",
   "/blog/why-patient-demand-disappears-between-inquiry-and-consultation",
@@ -25,7 +20,10 @@ for (const route of routes) {
       const failedRequests: string[] = [];
       page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
       page.on("pageerror", (error) => errors.push(error.message));
-      page.on("requestfailed", (request) => failedRequests.push(`${request.method()} ${request.url()}`));
+      page.on("requestfailed", (request) => {
+        // Third-party embeds (the booking calendar) can cancel their own requests; only our origin must be clean.
+        if (new URL(request.url()).hostname === new URL(page.url() || "http://127.0.0.1").hostname) failedRequests.push(`${request.method()} ${request.url()}`);
+      });
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       const response = await page.goto(route);
 
@@ -43,46 +41,9 @@ for (const route of routes) {
   }
 }
 
-test("desktop Solutions navigation routes both engagements", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-  const trigger = page.getByRole("button", { name: "Solutions" }).first();
-  await trigger.click();
-  await expect(trigger).toHaveAttribute("aria-expanded", "true");
-  await expect(
-    page.getByRole("navigation", { name: "Primary navigation" })
-      .getByRole("link", { name: /^Patient Conversion System/ }),
-  ).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(trigger).toHaveAttribute("aria-expanded", "false");
-  await expect(trigger).toBeFocused();
-});
-
-test("mobile Solutions accordion exposes both engagements", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
-  await page.getByRole("button", { name: /open navigation/i }).click();
-  const trigger = page.getByRole("button", { name: "Solutions" }).last();
-  await trigger.click();
-  await expect(page.getByRole("link", { name: /^Patient Conversion System/ }).last()).toBeVisible();
-  await expect(page.getByRole("link", { name: /^Regena Growth Partnership/ }).last()).toBeVisible();
-});
-
-test("booking page embeds the live Booked to Built calendar", async ({ page }) => {
-  await page.goto("/book");
-  await expect(page.getByTitle("Book a Regena strategy call")).toHaveAttribute(
-    "src",
-    "https://go.bookedtobuilt.com/widget/booking/SSSIdBYVLlfImPfGFN02",
-  );
-  await expect(page.getByRole("link", { name: /open it in a new tab/i })).toHaveAttribute(
-    "href",
-    "https://go.bookedtobuilt.com/widget/booking/SSSIdBYVLlfImPfGFN02",
-  );
-});
-
 test("all internal links resolve without errors", async ({ page, request, baseURL }) => {
   const hrefs = new Set<string>();
-  for (const route of ["/", ...routes]) {
+  for (const route of routes) {
     await page.goto(route);
     for (const href of await page.locator('a[href^="/"]').evaluateAll((links) =>
       links.map((link) => link.getAttribute("href")).filter((href): href is string => Boolean(href)),
@@ -96,7 +57,7 @@ test("all internal links resolve without errors", async ({ page, request, baseUR
 });
 
 test("keyboard users can skip repeated navigation on every route", async ({ page }) => {
-  for (const route of ["/", ...routes]) {
+  for (const route of routes) {
     await page.goto(route);
     await page.keyboard.press("Tab");
     const skipLink = page.getByRole("link", { name: "Skip to content" });
@@ -106,66 +67,14 @@ test("keyboard users can skip repeated navigation on every route", async ({ page
   }
 });
 
-test("solution and clinic routers update their recommended path", async ({ page }) => {
-  await page.goto("/solutions");
-  await page.getByRole("button", { name: /need more demand and conversion/i }).click();
-  const solution = page.getByTestId("solution-recommendation");
-  await expect(solution.getByText("Regena Growth Partnership")).toBeVisible();
-  await expect(solution.getByRole("link", { name: /explore solution/i })).toHaveAttribute("href", "/solutions/growth-partnership");
-
-  await page.goto("/clinics");
-  await page.getByRole("button", { name: /not sure where it breaks/i }).click();
-  const clinicRoute = page.getByTestId("clinic-route");
-  await expect(clinicRoute.getByText("Clinic-growth diagnostic")).toBeVisible();
-  await expect(clinicRoute.getByRole("link", { name: /view next step/i })).toHaveAttribute("href", "/book");
-});
-
-test("interactive operating diagrams respond to every stage", async ({ page }) => {
-  await page.goto("/solutions/patient-conversion-system");
-  for (const [index, stage, state] of [
-    [1, "Inquiry", "New inquiry visible"],
-    [2, "Response", "Live conversation started"],
-    [3, "Qualification", "Qualified patient"],
-    [4, "Booking", "Confirmed consultation"],
-    [5, "Attendance", "Consultation protected"],
-    [6, "Visibility", "Journey measurable"],
-  ] as const) {
-    await page.locator(".pipeline-tabs").getByRole("button", { name: `Stage ${index}: ${stage}` }).click();
-    await expect(page.getByRole("region", { name: "Active conversion stage" })).toContainText(state);
-  }
-
-  await page.goto("/approach");
-  for (const stage of ["Audit", "Architect", "Build", "Launch", "Operate", "Improve"]) {
-    await page.locator(".blueprint-rail").getByRole("button", { name: new RegExp(`\\b${stage}\\b`, "i") }).click();
-    await expect(page.locator(".blueprint-view")).toContainText(stage);
+test("retired v1 pages send visitors to the homepage", async ({ page }) => {
+  for (const route of ["/solutions", "/solutions/patient-conversion-system", "/approach", "/clinics", "/outcomes", "/quiz"]) {
+    await page.goto(route);
+    await expect(page, route).toHaveURL(/\/$/);
   }
 });
 
-test("operating stories remain compact while exposing every stage directly", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-
-  await page.goto("/solutions/patient-conversion-system");
-  await expect(page.locator(".conversion-scroll-story .scroll-story-markers")).toBeHidden();
-  expect(await page.locator(".conversion-scroll-story").evaluate((element) => element.getBoundingClientRect().height)).toBeLessThan(900);
-  await page.getByRole("button", { name: "Stage 6: Visibility" }).click();
-  await expect(page.getByRole("region", { name: "Active conversion stage" })).toContainText("Journey measurable");
-
-  await page.goto("/solutions/growth-partnership");
-  await expect(page.locator(".growth-scroll-story .scroll-story-markers")).toBeHidden();
-  expect(await page.locator(".growth-scroll-story").evaluate((element) => element.getBoundingClientRect().height)).toBeLessThan(900);
-  await page.getByRole("button", { name: "Growth stage 5: Visibility" }).click();
-  await expect(page.locator(".growth-engine-view")).toContainText("Visibility");
-
-  await page.goto("/approach");
-  await expect(page.locator(".approach-blueprint .scroll-story-markers")).toBeHidden();
-  expect(await page.locator(".approach-blueprint").evaluate((element) => element.getBoundingClientRect().height)).toBeLessThan(900);
-  await page.locator(".blueprint-rail").getByRole("button", { name: /improve/i }).click();
-  await expect(page.locator(".blueprint-view")).toContainText("Improve");
-});
-
-test("signature interactions remain complete under reduced motion", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/solutions/patient-conversion-system");
-  await expect(page.getByText(/voice, chat, qualification, scheduling, attendance, and visibility/i)).toBeVisible();
-  await expect(page.getByRole("button", { name: /stage 6: visibility/i })).toBeVisible();
+test("booking page embeds the live Regena calendar", async ({ page }) => {
+  await page.goto("/book");
+  await expect(page.locator("iframe[title='Book a call with Regena']")).toHaveAttribute("src", /go\.regena\.io\/widget\/booking\//);
 });

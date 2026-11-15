@@ -3,19 +3,13 @@ import { describe, expect, it } from "vitest";
 import { siteNav, siteRoutes, solutions, teamMembers } from "@/lib/site-content";
 
 describe("site content", () => {
-  it("keeps the approved routes and solution order", () => {
+  it("keeps the v2 routes", () => {
     expect(siteRoutes).toEqual([
       "/",
-      "/solutions",
-      "/solutions/patient-conversion-system",
-      "/solutions/growth-partnership",
-      "/approach",
-      "/clinics",
-      "/outcomes",
+      "/apply",
       "/company",
       "/careers",
       "/blog",
-      "/quiz",
       "/book",
       "/privacy",
       "/terms",

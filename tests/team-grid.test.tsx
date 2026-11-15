@@ -1,18 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import OutcomesPage from "@/app/outcomes/page";
 import { TeamGrid } from "@/components/team-grid";
 
-describe("outcomes and company", () => {
-  it("labels the fictional proof example clearly", () => {
-    const { container } = render(<OutcomesPage />);
-    expect(container.querySelector("[data-client-story]")).toHaveTextContent(/Northline Regenerative/i);
-    expect(container.querySelector("[data-client-story]")).toHaveTextContent(/Illustrative placeholder/i);
-    expect(screen.getByText(/fictional placeholder data/i)).toBeVisible();
-    expect(document.querySelectorAll("[data-client-story]")).toHaveLength(1);
-  });
-
+describe("company team", () => {
   it("renders the confirmed team with their supplied headshots", () => {
     const { container } = render(<TeamGrid />);
     expect(screen.getAllByTestId("team-member")).toHaveLength(4);

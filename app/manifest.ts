@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Regena",
     short_name: "Regena",
-    description: "Patient-growth infrastructure for regenerative and longevity clinics.",
+    description: "Patients in your chair for med spas and aesthetic clinics.",
     start_url: "/",
     display: "standalone",
     background_color: "#f4f1eb",
