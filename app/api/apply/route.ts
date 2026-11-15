@@ -14,6 +14,12 @@ function answerLabel(key: keyof ApplyAnswers, value: string) {
 // Step "answers" carries the qualification result.
 // If REGENA_APPLY_WEBHOOK_URL is set (e.g. a GHL inbound webhook), every submission is forwarded there too.
 
+// HighLevel wants first and last name apart, so texts can say "Hi Ana".
+function splitName(full: string) {
+  const [firstName = "", ...rest] = full.trim().split(/\s+/);
+  return { firstName, lastName: rest.join(" ") };
+}
+
 async function forward(payload: Record<string, unknown>) {
   const url = process.env.REGENA_APPLY_WEBHOOK_URL;
   if (!url) return "unconfigured";
@@ -49,7 +55,7 @@ export async function POST(request: Request) {
   const contactLines = `Email: ${contact.value.email}\nPhone: ${contact.value.phone}${contact.value.website ? `\nWebsite: ${contact.value.website}` : ""}`;
 
   if (body.step === "contact") {
-    const webhook = await forward({ step: "contact", ...contact.value, ...attribution, consent: true, consentText, submittedAt: new Date().toISOString() });
+    const webhook = await forward({ step: "contact", ...contact.value, ...splitName(contact.value.name), ...attribution, consent: true, consentText, submittedAt: new Date().toISOString() });
     return Response.json({ ok: true, webhook });
   }
 
@@ -74,6 +80,7 @@ export async function POST(request: Request) {
     forward({
       step: "answers",
       ...contact.value,
+      ...splitName(contact.value.name),
       ...answers.value,
       ...attribution,
       treatmentLabel: answerLabel("treatment", answers.value.treatment),
