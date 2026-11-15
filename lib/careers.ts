@@ -1,4 +1,4 @@
-export const careerRoles = ["Growth Advisor / Closer", "AI Systems Developer", "General application"] as const;
+export const careerRoles = ["Social Media Intern", "Appointment Setter", "Chief Sales Officer (CSO)", "General application"] as const;
 export type CareerRole = (typeof careerRoles)[number];
 
 export type CareerApplication = {
