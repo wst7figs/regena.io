@@ -5,6 +5,7 @@ import { CareersApplication } from "@/components/careers-application";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { InteriorPageShell, PageCta, SectionIntro } from "@/components/site-primitives";
+import { showTeam } from "@/lib/site-content";
 
 export const metadata: Metadata = { title: "Careers", description: "Join the small team putting patients in clinic chairs for med spas and aesthetic clinics." };
 
@@ -21,6 +22,6 @@ export default function CareersPage() {
     <section id="open-roles" className="interior-section"><div className="shell"><SectionIntro eyebrow="Open opportunities" title="High ownership. Flexible location. Built around outcomes." description="Every role requires meaningful overlap with North American business hours. Role-specific location and compensation details are listed below or discussed directly with qualified applicants." /><div className="role-grid">{roles.map(({ icon: Icon, title, type, copy }, index) => <article key={title}><div><Icon size={22} /><span>0{index + 1} · {type}</span></div><h2>{title}</h2><p>{copy}</p><a href="#apply">Apply for this path <ArrowDown size={15} /></a></article>)}</div></div></section>
     <section className="interior-section careers-standard"><div className="shell"><span className="eyebrow eyebrow-dark">The standard</span><div><h2>Early-stage means the edges are visible.</h2><p>You will own real work, communicate directly, use AI aggressively, and remain accountable for the judgment around it. We value evidence of execution over polished theatre.</p><ul><li>Tell the truth about what is verified.</li><li>Build around the user’s actual operating reality.</li><li>Move quickly without making reliability optional.</li><li>Leave the system clearer than you found it.</li></ul></div></div></section>
     <section id="apply" className="interior-section careers-apply"><div className="shell"><SectionIntro eyebrow="Apply" title="Show us the work behind the title." description="Your application goes directly to the Regena team. We review evidence, clarity, and ownership." /><CareersApplication /></div></section>
-    <section className="interior-section"><div className="shell"><PageCta title="Prefer to understand the company before applying?" description="Read why Regena exists and meet the people building it." href="/company" label="Meet the team" /></div></section>
+    <section className="interior-section"><div className="shell"><PageCta title="Prefer to understand the company before applying?" description={showTeam ? "Read why Regena exists and meet the people building it." : "Read why Regena exists and the rules we hold ourselves to."} href="/company" label={showTeam ? "Meet the team" : "About Regena"} /></div></section>
   </main><SiteFooter /></InteriorPageShell>;
 }

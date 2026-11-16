@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { teamMembers } from "@/lib/site-content";
+import { showTeam, teamMembers } from "@/lib/site-content";
 import {
   comparison,
   countingProcess,
@@ -193,26 +193,30 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="v2-section v2-dark" aria-labelledby="team-title">
+        {showTeam && (
+        <section className="v2-section v2-dark" id="team" aria-labelledby="team-title">
           <div className="shell v2-team">
             <Reveal className="v2-heading">
-              <span className="eyebrow eyebrow-dark">Who you work with</span>
+              <span className="eyebrow eyebrow-dark">Meet the team</span>
               <h2 id="team-title">Founder-led, and small on purpose.</h2>
               <p>We&apos;re taking a small number of partner clinics, one per area, and you work directly with the founders. Based in Edmonton, working with clinics across Canada and the US.</p>
             </Reveal>
             <ul className="v2-team-grid">
               {teamMembers.map((member) => (
                 <li key={member.name}>
-                  <a href={member.linkedin} target="_blank" rel="noreferrer">
+                  <a href={member.linkedin} target="_blank" rel="noreferrer" aria-label={`${member.name}, ${member.role}, on LinkedIn`}>
                     <Image src={member.photo} alt="" width={320} height={380} />
                     <strong>{member.name}</strong>
                     <small>{member.role}</small>
+                    <p>{member.forClinics}</p>
+                    <span className="v2-team-link">LinkedIn <ArrowUpRight aria-hidden="true" size={14} /></span>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
         </section>
+        )}
 
         <section className="v2-section" id="faq" aria-labelledby="faq-title">
           <div className="shell v2-faq">
