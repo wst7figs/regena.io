@@ -38,6 +38,7 @@ describe("production integration boundaries", () => {
     expect(payload).toMatchObject({ step: "answers", clinic: "Glow Clinic", treatment: "body", treatmentLabel: "Body contouring or fat dissolving", fit: true, consent: true });
     expect(payload.consentText).toMatch(/Reply STOP/);
     expect(payload).toMatchObject({ utm_source: "facebook", fbclid: "abc123" });
+    expect(payload).toMatchObject({ firstName: "Ana", lastName: "Diaz" });
     expect(payload).not.toHaveProperty("evil");
   });
 
