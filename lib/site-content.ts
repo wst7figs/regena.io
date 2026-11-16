@@ -98,6 +98,10 @@ export const clinicCriteria = [
   { label: "Operational will", description: "Leadership is prepared to change process when the evidence supports it." },
 ] as const;
 
+// Team sections are hidden until new team photos are ready (Luan, Nov 2026).
+// Set to true to bring back the homepage "Meet the team" section, the /company team grid and the links to them.
+export const showTeam = false;
+
 export const teamMembers: TeamMember[] = [
   { name: "Luan West", role: "CEO & Co-Founder", initials: "LW", ownership: "Company direction, market, positioning, and commercial accountability.", forClinics: "Runs your first call and sets the plan for your clinic and your area.", linkedin: "https://www.linkedin.com/in/luanwest/", photo: "/team/luan-west.webp" },
   { name: "Jean-Pierre van Eeden", role: "COO & Co-Founder", initials: "JP", ownership: "Operations, delivery systems, implementation quality, and client success.", forClinics: "Runs onboarding and the day-to-day work: follow-up, booking, confirmations and reminders.", linkedin: "https://www.linkedin.com/in/jean-pierre-van-eeden-0a667726b/", photo: "/team/jean-pierre-van-eeden.webp" },
@@ -120,7 +124,7 @@ export const footerGroups = [
     label: "Company",
     links: [
       { label: "About Regena", href: "/company" },
-      { label: "Meet the team", href: "/#team" },
+      ...(showTeam ? [{ label: "Meet the team", href: "/#team" }] : []),
       { label: "Careers", href: "/careers" },
       { label: "Blog", href: "/blog" },
     ],

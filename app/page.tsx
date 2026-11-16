@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { teamMembers } from "@/lib/site-content";
+import { showTeam, teamMembers } from "@/lib/site-content";
 import {
   comparison,
   countingProcess,
@@ -193,6 +193,7 @@ export default function Home() {
           </div>
         </section>
 
+        {showTeam && (
         <section className="v2-section v2-dark" id="team" aria-labelledby="team-title">
           <div className="shell v2-team">
             <Reveal className="v2-heading">
@@ -215,6 +216,7 @@ export default function Home() {
             </ul>
           </div>
         </section>
+        )}
 
         <section className="v2-section" id="faq" aria-labelledby="faq-title">
           <div className="shell v2-faq">
