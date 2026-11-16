@@ -29,6 +29,8 @@ export type TeamMember = {
   role: string;
   initials: string;
   ownership: string;
+  // One plain line on what this person does for a partner clinic (homepage "Meet the team").
+  forClinics: string;
   linkedin: string;
   photo: string;
 };
@@ -97,10 +99,10 @@ export const clinicCriteria = [
 ] as const;
 
 export const teamMembers: TeamMember[] = [
-  { name: "Luan West", role: "CEO & Co-Founder", initials: "LW", ownership: "Company direction, market, positioning, and commercial accountability.", linkedin: "https://www.linkedin.com/in/luanwest/", photo: "/team/luan-west.webp" },
-  { name: "Jean-Pierre van Eeden", role: "COO & Co-Founder", initials: "JP", ownership: "Operations, delivery systems, implementation quality, and client success.", linkedin: "https://www.linkedin.com/in/jean-pierre-van-eeden-0a667726b/", photo: "/team/jean-pierre-van-eeden.webp" },
-  { name: "Julian Hollen", role: "CTO", initials: "JH", ownership: "AI systems, software development, integrations, and technical reliability.", linkedin: "https://www.linkedin.com/in/julianholien/", photo: "/team/julian-hollen.webp" },
-  { name: "Shoham Zahir", role: "CSO", initials: "SZ", ownership: "Growth strategy, commercial systems, and strategic execution.", linkedin: "https://www.linkedin.com/in/shoham-zahir-77151a325/", photo: "/team/shoham-zahir.webp" },
+  { name: "Luan West", role: "CEO & Co-Founder", initials: "LW", ownership: "Company direction, market, positioning, and commercial accountability.", forClinics: "Runs your first call and sets the plan for your clinic and your area.", linkedin: "https://www.linkedin.com/in/luanwest/", photo: "/team/luan-west.webp" },
+  { name: "Jean-Pierre van Eeden", role: "COO & Co-Founder", initials: "JP", ownership: "Operations, delivery systems, implementation quality, and client success.", forClinics: "Runs onboarding and the day-to-day work: follow-up, booking, confirmations and reminders.", linkedin: "https://www.linkedin.com/in/jean-pierre-van-eeden-0a667726b/", photo: "/team/jean-pierre-van-eeden.webp" },
+  { name: "Julian Hollen", role: "CTO", initials: "JH", ownership: "AI systems, software development, integrations, and technical reliability.", forClinics: "Builds the systems and tracking that show which ads turn into patients in your chair.", linkedin: "https://www.linkedin.com/in/julianholien/", photo: "/team/julian-hollen.webp" },
+  { name: "Shoham Zahir", role: "CSO", initials: "SZ", ownership: "Growth strategy, commercial systems, and strategic execution.", forClinics: "Shapes the campaigns and offers we run for your clinic.", linkedin: "https://www.linkedin.com/in/shoham-zahir-77151a325/", photo: "/team/shoham-zahir.webp" },
 ];
 
 export const footerGroups = [
@@ -118,6 +120,7 @@ export const footerGroups = [
     label: "Company",
     links: [
       { label: "About Regena", href: "/company" },
+      { label: "Meet the team", href: "/#team" },
       { label: "Careers", href: "/careers" },
       { label: "Blog", href: "/blog" },
     ],
