@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const principles = [
-  "Get paid when patients show up, not for activity",
+  "Tie our fee to patients who show up, not to activity",
   "Call every lead while they still care",
   "Never give medical advice. Providers own clinical questions",
   "Show every appointment by name and source",
