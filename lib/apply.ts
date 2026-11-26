@@ -15,6 +15,7 @@ export type Verdict = { fit: true } | { fit: false; reason: string };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const floridaPattern = /^\s*(fl|florida)\s*$/i;
+const quebecPattern = /^\s*(qc|pq|qu[eé]bec)\s*$/i;
 
 function clean(value: unknown, max = 160) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
@@ -60,12 +61,35 @@ export function parseAnswers(input: unknown): { ok: true; value: ApplyAnswers } 
   return errors.length ? { ok: false, errors } : { ok: true, value: answers as ApplyAnswers };
 }
 
-// We take most clinics right now, so the only hard gate is where we can't legally run outreach yet.
-// The answers still go to the team so the call starts with context. Everything else is a conversation.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- answers kept in the signature so new gates stay one line away
-export function qualify(contact: Pick<ApplyContact, "country" | "region">, _answers?: ApplyAnswers): Verdict {
+// Offer v4 gates, matched to the funnel quiz (funnels.regena.io). Hard stops only where 100 patients in
+// 90 days can't work: where we don't operate, a main package under $1,000, revenue under $25k, or no ad budget.
+// Borderline answers still book a call; they're sent to GHL as flags so Luan sees them first.
+export function qualify(contact: Pick<ApplyContact, "country" | "region">, answers?: ApplyAnswers): Verdict {
   if (contact.country === "US" && floridaPattern.test(contact.region)) {
     return { fit: false, reason: "We aren't taking clinics in Florida right now." };
   }
+  if (contact.country === "CA" && quebecPattern.test(contact.region)) {
+    return { fit: false, reason: "We aren't taking clinics in Quebec right now." };
+  }
+  if (answers?.packagePrice === "under-1000") {
+    return { fit: false, reason: "Right now we work with clinics whose main package is $1,000 or more." };
+  }
+  if (answers?.revenue === "under-25k") {
+    return { fit: false, reason: "Right now we work with clinics a little further along." };
+  }
+  if (answers?.adBudget === "no") {
+    return { fit: false, reason: "Our system needs at least $100 a day in Meta ads for 90 days to work well." };
+  }
   return { fit: true };
+}
+
+/** Borderline answers, sent to GHL so the call starts with context. */
+export function flagsFor(answers: ApplyAnswers): string[] {
+  const flags: string[] = [];
+  if (answers.capacity === "under-30") flags.push("capacity");
+  if (answers.packagePrice === "1000-1500") flags.push("package");
+  if (answers.revenue === "25-50k") flags.push("revenue");
+  if (answers.pastPatients !== "1000-plus") flags.push("pastPatients");
+  if (answers.adBudget === "unsure") flags.push("adBudget");
+  return flags;
 }

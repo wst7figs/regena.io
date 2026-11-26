@@ -27,19 +27,19 @@ export const metadata: Metadata = {
     template: "%s | Regena",
   },
   description:
-    "Regena runs Meta ads, speed-to-lead, booking, no-show recovery and past-patient reactivation for med spas and aesthetic clinics. Our fee is tied to patients who show up.",
+    "Regena books 100 new patients in 90 days for med spas and aesthetic clinics: ads, speed-to-lead, booking, no-show recovery and reactivation. $60 a patient prepaid, plus ad spend.",
   metadataBase: new URL("https://regena.io"),
   openGraph: {
     type: "website",
     siteName: "Regena",
     url: "https://regena.io",
     title: "Regena | Patients in your chair, not just leads",
-    description: "Regena runs Meta ads, speed-to-lead, booking, no-show recovery and past-patient reactivation for med spas and aesthetic clinics. Our fee is tied to patients who show up.",
+    description: "Regena books 100 new patients in 90 days for med spas and aesthetic clinics: ads, speed-to-lead, booking, no-show recovery and reactivation. $60 a patient prepaid, plus ad spend.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Regena | Patients in your chair, not just leads",
-    description: "Regena runs Meta ads, speed-to-lead, booking, no-show recovery and past-patient reactivation for med spas and aesthetic clinics. Our fee is tied to patients who show up.",
+    description: "Regena books 100 new patients in 90 days for med spas and aesthetic clinics: ads, speed-to-lead, booking, no-show recovery and reactivation. $60 a patient prepaid, plus ad spend.",
   },
 };
 

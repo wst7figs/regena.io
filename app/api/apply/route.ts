@@ -1,4 +1,4 @@
-import { parseAnswers, parseContact, qualify } from "@/lib/apply";
+import { flagsFor, parseAnswers, parseContact, qualify } from "@/lib/apply";
 import { pickAttribution } from "@/lib/attribution";
 import { escapeHtml, sendEmail } from "@/lib/email";
 import { applyQuestions, type ApplyAnswers } from "@/lib/v2-content";
@@ -87,6 +87,10 @@ export async function POST(request: Request) {
       revenueLabel: answerLabel("revenue", answers.value.revenue),
       pastPatientsLabel: answerLabel("pastPatients", answers.value.pastPatients),
       adBudgetLabel: answerLabel("adBudget", answers.value.adBudget),
+      capacityLabel: answerLabel("capacity", answers.value.capacity),
+      packagePriceLabel: answerLabel("packagePrice", answers.value.packagePrice),
+      flags: flagsFor(answers.value).join(","),
+      offerVersion: "v4",
       fit: verdict.fit,
       reason: verdict.fit ? "" : verdict.reason,
       consent: true,

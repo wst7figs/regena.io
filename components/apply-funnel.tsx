@@ -165,7 +165,7 @@ export function ApplyFunnel() {
             <>
               <span className="apply-step-label">You look like a fit</span>
               <h2>Pick a time with Luan.</h2>
-              <p>On the call we&apos;ll look at your offer, your area and your capacity, and you&apos;ll get exact numbers for your clinic.</p>
+              <p>On the call we&apos;ll look at your offer, your city and your capacity, and you&apos;ll get exact numbers for your clinic.</p>
               <BookingWidget prefill={{ name: contact.name, email: contact.email, phone: contact.phone, website: contact.website }} />
             </>
           ) : (

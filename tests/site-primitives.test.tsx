@@ -25,7 +25,7 @@ describe("site primitives", () => {
         <ResultNote>Observed client results are not guarantees.</ResultNote>
       </>,
     );
-    expect(screen.getByRole("link", { name: /check if your area is open/i })).toHaveAttribute("href", "/apply");
+    expect(screen.getByRole("link", { name: /check if your city is open/i })).toHaveAttribute("href", "/apply");
     expect(screen.getByText(/not guarantees/i)).toBeVisible();
   });
 });
