@@ -137,7 +137,7 @@ export function ApplyFunnel() {
       {step === "questions" ? (
         <form onSubmit={onAnswers} noValidate>
           <span className="apply-step-label">Step 2 of 2</span>
-          <h2>Four quick questions about the clinic.</h2>
+          <h2>Six quick questions about the clinic.</h2>
           {questionKeys.map((key) => (
             <fieldset className="apply-question" key={key}>
               <legend>{applyQuestions[key].label}</legend>
