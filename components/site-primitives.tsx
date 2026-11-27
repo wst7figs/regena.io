@@ -60,7 +60,7 @@ export function PageCta({
   title,
   description = "Answer a few quick questions. If it's a fit, you'll pick a time with Luan right away.",
   href = "/apply",
-  label = "Check if your area is open",
+  label = "Check if your city is open",
 }: {
   eyebrow?: string;
   title: string;

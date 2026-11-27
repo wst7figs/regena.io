@@ -44,9 +44,9 @@ export function ArticleBody({ article }: { article: Article }) {
             </section>
           ))}
           <aside className="article-cta">
-            <span>One clinic per area</span>
+            <span>One clinic per city</span>
             <h2>Want more patients in your chair, not just more leads?</h2>
-            <Link className="button button-light" href="/apply">Check if your area is open <ArrowUpRight aria-hidden="true" size={16} /></Link>
+            <Link className="button button-light" href="/apply">Check if your city is open <ArrowUpRight aria-hidden="true" size={16} /></Link>
           </aside>
         </div>
       </div>}

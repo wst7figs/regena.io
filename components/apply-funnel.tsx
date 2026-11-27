@@ -137,7 +137,7 @@ export function ApplyFunnel() {
       {step === "questions" ? (
         <form onSubmit={onAnswers} noValidate>
           <span className="apply-step-label">Step 2 of 2</span>
-          <h2>Four quick questions about the clinic.</h2>
+          <h2>Six quick questions about the clinic.</h2>
           {questionKeys.map((key) => (
             <fieldset className="apply-question" key={key}>
               <legend>{applyQuestions[key].label}</legend>
@@ -165,7 +165,7 @@ export function ApplyFunnel() {
             <>
               <span className="apply-step-label">You look like a fit</span>
               <h2>Pick a time with Luan.</h2>
-              <p>On the call we&apos;ll look at your offer, your area and your capacity, and you&apos;ll get exact numbers for your clinic.</p>
+              <p>On the call we&apos;ll look at your offer, your city and your capacity, and you&apos;ll get exact numbers for your clinic.</p>
               <BookingWidget prefill={{ name: contact.name, email: contact.email, phone: contact.phone, website: contact.website }} />
             </>
           ) : (

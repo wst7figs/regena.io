@@ -33,7 +33,7 @@ export function SiteHeader() {
           {siteNav.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
         </nav>
 
-        <Link className="button button-dark header-cta" href="/apply">Check your area <ArrowUpRight aria-hidden="true" size={16} /></Link>
+        <Link className="button button-dark header-cta" href="/apply">Check your city <ArrowUpRight aria-hidden="true" size={16} /></Link>
         <button className="menu-button" type="button" aria-label={isOpen ? "Close navigation" : "Open navigation"} aria-expanded={isOpen} aria-controls="mobile-navigation" onClick={() => setIsOpen((current) => !current)}>{isOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}</button>
       </div>
 
@@ -41,7 +41,7 @@ export function SiteHeader() {
         <nav id="mobile-navigation" className="mobile-nav" aria-label="Mobile navigation">
           <div className="shell mobile-nav-inner">
             {siteNav.map((item) => <Link key={item.href} href={item.href} onClick={close}>{item.label}</Link>)}
-            <Link className="button button-dark" href="/apply" onClick={close}>Check your area <ArrowUpRight aria-hidden="true" size={16} /></Link>
+            <Link className="button button-dark" href="/apply" onClick={close}>Check your city <ArrowUpRight aria-hidden="true" size={16} /></Link>
           </div>
         </nav>
       ) : null}

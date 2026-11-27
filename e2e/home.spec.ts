@@ -12,9 +12,9 @@ for (const width of [375, 768, 1024, 1440]) {
 test("primary calls to action open the apply funnel", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  await page.getByRole("link", { name: /check if your area is open/i }).first().click();
+  await page.getByRole("link", { name: /check if your city is open/i }).first().click();
   await expect(page).toHaveURL(/\/apply$/);
-  await expect(page.getByRole("heading", { level: 1, name: /check if your area is open/i })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /check if your city is open/i })).toBeVisible();
 });
 
 async function fillContact(page: Page, region: string, country: "CA" | "US" = "CA") {

@@ -4,7 +4,7 @@ import { POST } from "@/app/api/apply/route";
 import { sendEmail } from "@/lib/email";
 
 const contact = { name: "Ana Diaz", clinic: "Glow Clinic", email: "ana@glow.ca", phone: "780 555 0101", city: "Edmonton", region: "Alberta", country: "CA", consent: true };
-const answers = { treatment: "body", revenue: "25-50k", pastPatients: "unsure", adBudget: "unsure" };
+const answers = { treatment: "body", capacity: "30-50", packagePrice: "1500-2500", revenue: "25-50k", pastPatients: "unsure", adBudget: "unsure" };
 const post = (body: unknown) => POST(new Request("http://localhost/api/apply", { method: "POST", body: JSON.stringify(body) }));
 
 afterEach(() => {

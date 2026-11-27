@@ -10,8 +10,8 @@ export function SiteFooter() {
       <div className="shell footer-enterprise">
         <div className="footer-brand">
           <Link className="wordmark" href="/">REGENA</Link>
-          <p>Patients in your chair for med spas and aesthetic clinics. Never billed for a no-show.</p>
-          <a className="footer-book" href="/apply">Check if your area is open <ArrowUpRight size={15} /></a>
+          <p>100 new patients in 90 days for med spas and aesthetic clinics. Every patient we miss, you get back.</p>
+          <a className="footer-book" href="/apply">Check if your city is open <ArrowUpRight size={15} /></a>
           <a className="footer-contact" href="mailto:contact@regena.io">contact@regena.io</a>
         </div>
         <div className="footer-groups">

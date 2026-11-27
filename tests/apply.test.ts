@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import { bookingSrc } from "@/components/booking-widget";
-import { parseAnswers, parseContact, qualify } from "@/lib/apply";
+import { flagsFor, parseAnswers, parseContact, qualify } from "@/lib/apply";
 import { pickAttribution } from "@/lib/attribution";
 import type { ApplyAnswers } from "@/lib/v2-content";
 
-const good: ApplyAnswers = { treatment: "laser", revenue: "50-100k", pastPatients: "1000-plus", adBudget: "yes" };
+const good: ApplyAnswers = { treatment: "laser", capacity: "50-100", packagePrice: "1500-2500", revenue: "50-100k", pastPatients: "1000-plus", adBudget: "yes" };
 const contact = { name: "Ana Diaz", clinic: "Glow Laser", email: "ana@glow.ca", phone: "780 555 0101", city: "Edmonton", region: "Alberta", country: "CA", consent: true };
 
 describe("booking calendar prefill", () => {
@@ -44,13 +44,22 @@ describe("apply funnel rules", () => {
     expect(qualify({ country: "CA", region: "Alberta" }, good)).toEqual({ fit: true });
   });
 
-  it("only turns away Florida; every other answer goes to a call", () => {
+  it("turns away Florida and Quebec", () => {
     expect(qualify({ country: "US", region: "FL" }, good).fit).toBe(false);
     expect(qualify({ country: "US", region: "Florida" }, good).fit).toBe(false);
+    expect(qualify({ country: "CA", region: "QC" }, good).fit).toBe(false);
+    expect(qualify({ country: "CA", region: "Québec" }, good).fit).toBe(false);
     expect(qualify({ country: "US", region: "Texas" }, good).fit).toBe(true);
     expect(qualify({ country: "CA", region: "FL" }, good).fit).toBe(true);
-    const small: ApplyAnswers = { treatment: "injectables", revenue: "under-25k", pastPatients: "under-500", adBudget: "no" };
-    expect(qualify({ country: "CA", region: "Ontario" }, small).fit).toBe(true);
-    expect(qualify({ country: "CA", region: "Ontario" }, { ...good, treatment: "body", adBudget: "unsure" }).fit).toBe(true);
+  });
+
+  it("applies the v4 gates and lets borderline clinics book with flags", () => {
+    expect(qualify({ country: "CA", region: "Ontario" }, { ...good, packagePrice: "under-1000" }).fit).toBe(false);
+    expect(qualify({ country: "CA", region: "Ontario" }, { ...good, revenue: "under-25k" }).fit).toBe(false);
+    expect(qualify({ country: "CA", region: "Ontario" }, { ...good, adBudget: "no" }).fit).toBe(false);
+    const borderline: ApplyAnswers = { ...good, treatment: "injectables", capacity: "under-30", packagePrice: "1000-1500", revenue: "25-50k", adBudget: "unsure" };
+    expect(qualify({ country: "CA", region: "Ontario" }, borderline).fit).toBe(true);
+    expect(flagsFor(borderline)).toEqual(["capacity", "package", "revenue", "adBudget"]);
+    expect(flagsFor(good)).toEqual([]);
   });
 });

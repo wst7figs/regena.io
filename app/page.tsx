@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 const statusLabel = { showed: "Showed", "no-show": "No-show", rebooked: "Rebooked", excluded: "Excluded" } as const;
 
-function ApplyButton({ label = "Check if your area is open" }: { label?: string }) {
+function ApplyButton({ label = "Check if your city is open" }: { label?: string }) {
   return <Link className="button button-dark v2-cta" href="/apply">{label} <ArrowUpRight aria-hidden="true" size={17} /></Link>;
 }
 
@@ -41,16 +41,16 @@ export default function Home() {
           <div className="shell v2-hero-grid">
             <div className="v2-hero-copy">
               <span className="eyebrow">For med spas and aesthetic clinics</span>
-              <h1 id="hero-title">Patients in your chair, not just leads in your inbox.</h1>
+              <h1 id="hero-title">100 new patients in 90 days. $60 each, prepaid.</h1>
               <p className="v2-lede">
-                We run your Meta ads, call every lead within minutes, book and confirm them, chase no-shows and bring back
-                past patients. Our fee is tied to patients who actually show up, not leads or clicks.
+                We run your Meta ads, text every lead within minutes, book them with a deposit, chase no-shows and bring back
+                past patients. $6,000 for all 100, or $2,500 a month, plus ad spend paid to Meta. Every patient we miss, you get back.
               </p>
               <div className="v2-hero-actions">
                 <ApplyButton />
                 <a className="button button-secondary" href="#how">See how it works <ArrowDown aria-hidden="true" size={16} /></a>
               </div>
-              <small className="v2-hero-note">Takes about 2 minutes. One clinic per area.</small>
+              <small className="v2-hero-note">Takes about 2 minutes. One clinic per city.</small>
             </div>
 
             <figure className="v2-report" aria-label="Sample weekly report">
@@ -67,7 +67,7 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <figcaption>Every completed appointment by source. The report is also your invoice.</figcaption>
+              <figcaption>Every appointment we booked, by source. It&apos;s how we count toward your 100.</figcaption>
             </figure>
           </div>
 
@@ -127,7 +127,7 @@ export default function Home() {
           <div className="shell">
             <Reveal className="v2-heading">
               <span className="eyebrow">How it works</span>
-              <h2 id="how-title">Live in about two weeks.</h2>
+              <h2 id="how-title">Live in 10 business days.</h2>
             </Reveal>
             <ol className="v2-steps">
               {steps.map((step) => (
@@ -147,7 +147,7 @@ export default function Home() {
           <div className="shell v2-counts">
             <Reveal className="v2-heading">
               <span className="eyebrow">What counts</span>
-              <h2 id="counts-title">Our fee follows one thing: a patient who completes an appointment.</h2>
+              <h2 id="counts-title">Your 100 counts one thing: a patient who paid a deposit and showed up.</h2>
               <p>Most agencies count leads or bookings and keep the definition vague. Here is what counts for us.</p>
             </Reveal>
             <div className="v2-counts-grid">
@@ -169,7 +169,7 @@ export default function Home() {
                 </ol>
               </Reveal>
             </div>
-            <p className="v2-promise"><strong>You never pay for a no-show.</strong> If a patient doesn&apos;t walk in, it costs you nothing, and we work to get them back on the calendar.</p>
+            <p className="v2-promise"><strong>Every patient we miss, you get back.</strong> $60 a patient ($75 on monthly), or we keep working free until you have 100.</p>
           </div>
         </section>
 
@@ -199,7 +199,7 @@ export default function Home() {
             <Reveal className="v2-heading">
               <span className="eyebrow eyebrow-dark">Meet the team</span>
               <h2 id="team-title">Founder-led, and small on purpose.</h2>
-              <p>We&apos;re taking a small number of partner clinics, one per area, and you work directly with the founders. Based in Edmonton, working with clinics across Canada and the US.</p>
+              <p>We&apos;re taking a small number of partner clinics, one per city, and you work directly with the founders. Based in Edmonton, working with clinics across Canada and the US.</p>
             </Reveal>
             <ul className="v2-team-grid">
               {teamMembers.map((member) => (
@@ -237,9 +237,9 @@ export default function Home() {
 
         <section className="v2-final" aria-labelledby="final-title">
           <div className="shell v2-final-inner">
-            <h2 id="final-title">One clinic per area. Check if yours is open.</h2>
+            <h2 id="final-title">One clinic per city. Check if yours is open.</h2>
             <p>Answer a few quick questions. If it&apos;s a fit, you&apos;ll pick a time with Luan right away.</p>
-            <ApplyButton label="Check your area" />
+            <ApplyButton label="Check your city" />
           </div>
         </section>
       </main>

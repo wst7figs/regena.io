@@ -8,7 +8,7 @@ describe("SiteHeader", () => {
   it("links to the v2 sections and the apply funnel", () => {
     render(<SiteHeader />);
     expect(screen.getByRole("link", { name: /how it works/i })).toHaveAttribute("href", "/#how");
-    expect(screen.getByRole("link", { name: /check your area/i })).toHaveAttribute("href", "/apply");
+    expect(screen.getByRole("link", { name: /check your city/i })).toHaveAttribute("href", "/apply");
   });
 
   it("opens and closes the mobile navigation", async () => {

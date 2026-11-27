@@ -1,8 +1,14 @@
-// Single source for the v2 (Nov 2026) homepage and apply funnel copy.
-// Rules: no Regena prices, no client results, no invented proof. Sell the model.
-// Keep the ICP broad (med spas and aesthetic clinics). Laser is fine as an example, never a requirement.
-// Every claim must also hold for existing partner clinics on older terms (e.g. a monthly base + per-show fee),
-// so say "our fee is tied to patients who show up", never "you only pay when they show up".
+// Single source for the homepage and apply funnel copy. Offer v4 (locked Nov 23 2026, copy Nov 26).
+// Rules:
+// - Show the price: lead with the per-patient number ($60 prepaid, $75 monthly) and ALWAYS put the total
+//   ($6,000, or $2,500 a month) and "plus ad spend" next to it. The promise is 100 new patients in 90 days
+//   who pay a deposit and show up; every one we miss is refunded at the clinic's rate.
+// - No client results, testimonials or invented proof until we have real ones with written permission.
+// - Broad ICP: med spas and aesthetic clinics in the US and Canada, except Florida and Quebec.
+//   Laser is an example, never a requirement. One clinic per city.
+// - Write for the majority of clinics. Edge cases (physician-owned clinics, older partner terms) are
+//   handled on the sales call and in the agreement, not here.
+// - No "only one", "cheapest" or "best", and no revenue promises beyond the 100.
 
 export const bookingUrl =
   process.env.NEXT_PUBLIC_BOOKING_URL ?? "https://go.regena.io/widget/booking/DPLeuNxOGB7PkoF1eg6u";
@@ -10,28 +16,29 @@ export const bookingUrl =
 export const legalName = "Regena Technologies Inc.";
 
 export const heroFacts = [
-  "Never billed for a no-show",
-  "Month to month",
+  "$60 a patient, prepaid",
+  "Misses refunded",
   "No setup fee",
-  "Live in about two weeks",
-  "One clinic per area",
+  "Live in 10 business days",
+  "One clinic per city",
 ] as const;
 
 export const sampleReport = [
   { patient: "New patient", detail: "Laser · full legs", status: "showed", note: "Counts" },
   { patient: "Past patient", detail: "Last seen 14 months ago", status: "showed", note: "Counts" },
-  { patient: "New patient", detail: "Body contouring consult", status: "no-show", note: "Not billed · rebooking" },
+  { patient: "New patient", detail: "Body contouring consult", status: "no-show", note: "Doesn't count · rebooking" },
   { patient: "New patient", detail: "Skin · facial", status: "rebooked", note: "Counts when they show" },
   { patient: "Walk-in", detail: "Not from Regena", status: "excluded", note: "Never counts" },
 ] as const;
 
 export const comparison = [
-  { topic: "What you pay for", agency: "Leads and clicks, whether or not anyone shows up", regena: "Patients who actually show up" },
+  { topic: "What you pay for", agency: "Leads and clicks, whether or not anyone shows up", regena: "$60 to $75 per patient who shows, prepaid. Every one we miss is refunded" },
+  { topic: "Promise", agency: "None", regena: "100 new patients in 90 days" },
   { topic: "Who calls new leads", agency: "Your front desk, when they get to it", regena: "Our team, within minutes during your hours" },
-  { topic: "No-shows", agency: "Your problem, and still billed", regena: "We chase and rebook them. You never pay for one" },
+  { topic: "No-shows", agency: "Your problem, and still billed", regena: "We chase and rebook them. They never count toward your 100" },
   { topic: "Past patients", agency: "Not included", regena: "We invite back patients you haven't seen in a while" },
   { topic: "After the first visit", agency: "Nothing", regena: "Follow-up so first visits turn into treatment plans" },
-  { topic: "Commitment", agency: "3 to 6 month contracts", regena: "Month to month" },
+  { topic: "Commitment", agency: "3 to 6 month contracts", regena: "Month to month, with a 90-day guarantee" },
 ] as const;
 
 export const services = [
@@ -44,49 +51,55 @@ export const services = [
 ] as const;
 
 export const steps = [
-  { when: "Day 0", title: "Fit call and access", body: "We agree on the offer, your capacity and your area, then get access to your ad account, Facebook page and calendar." },
+  { when: "Day 0", title: "Fit call and access", body: "We agree on the offer, your capacity and your city, then get access to your ad account, Facebook page and calendar." },
   { when: "Week 1", title: "We build it", body: "Ads, form, speed-to-lead, booking, confirmations, no-show recovery and show tracking." },
-  { when: "Week 2", title: "You're live", body: "Campaigns on and our team working your leads." },
-  { when: "Every week", title: "A plain report", body: "Every appointment we booked, whether they showed, and where they came from." },
-  { when: "Day 60", title: "Review together", body: "Cost per patient and what's converting. Then we keep going, rework the offer, or part ways." },
+  { when: "Day 10", title: "You're live", body: "Campaigns on and our team working your leads, within 10 business days of getting access." },
+  { when: "Every week", title: "A plain report", body: "Every appointment we booked, whether they showed, where they came from, and how close you are to 100." },
+  { when: "Day 30", title: "33+ patients", body: "First checkpoint. If we're behind, we fix the offer, the ads or the follow-up, not later." },
+  { when: "Day 60", title: "66+ patients", body: "Second checkpoint, same check." },
+  { when: "Day 90", title: "100+ patients", body: "If we're short, you pick: a refund for every patient we missed, or we keep working free until 100." },
 ] as const;
 
 export const countingRules = [
-  { counts: true, text: "A new patient who came from our ads and completed their appointment" },
-  { counts: true, text: "A past patient who came back through our outreach" },
+  { counts: true, text: "Anyone we booked through our ads, setter or texts who paid a deposit and showed up" },
+  { counts: true, text: "New patients and past patients alike" },
   { counts: false, text: "No-shows and cancellations" },
-  { counts: false, text: "Recent patients, walk-ins and referrals" },
+  { counts: false, text: "Anyone already booked before we contacted them" },
 ] as const;
 
 export const countingProcess = [
-  "Your team marks each appointment as showed or no-show.",
-  "You get a report with every appointment, by name and source.",
-  "You can question any appointment before it's billed.",
-  "You can set a monthly cap. When it's reached, we pause ads or you raise it.",
+  "Your team marks each appointment as showed or no-show within 48 hours. Unmarked counts as showed.",
+  "You get a weekly report with every appointment, by name and source.",
+  "Checkpoints at day 30 (33+) and day 60 (66+), so you always know where you stand.",
+  "At day 90, any patient we're short is refunded at your rate, or we keep working free until 100.",
 ] as const;
 
 export const goodFit = [
   "You're a med spa or aesthetic clinic with a treatment people already ask for, like laser hair removal, body contouring or skin treatments",
-  "You have room in the schedule for more patients",
-  "You can fund a Meta ad budget, paid directly to Meta",
+  "You have room for about 35 more patients a month",
+  "You can fund at least $100 a day in Meta ads for 90 days, paid directly to Meta",
   "Your team can mark appointments as showed or no-show",
 ] as const;
 
 export const notFit = [
-  "Your schedule is already full",
-  "You can't fund an ad budget yet",
-  "We already work with a clinic in your area",
-  "You're in Florida, where we aren't working yet",
+  "You can't take about 35 more patients a month",
+  "You can't fund $100 a day in ads yet",
+  "We already work with a clinic in your city",
+  "You're in Florida or Quebec, where we aren't working yet",
 ] as const;
 
 export const faqs = [
   {
     q: "How much does it cost?",
-    a: "Our fee is tied to completed appointments, and you're never billed for a no-show. Pricing depends on your treatments and market, so we go through exact numbers on the call. Month to month, no setup fee. Your ad spend goes directly to Meta.",
+    a: "$60 a patient, prepaid: $6,000 for 100 patients over 90 days. Or $75 a patient on the monthly plan: $2,500 a month. No setup fee. Ads are on top, paid straight to Meta at $100 a day or more, about $9,000 over 90 days, so all-in it's roughly $150 to $165 a patient. US clinics pay in USD, Canadian clinics in CAD, same numbers.",
   },
   {
     q: "What if it doesn't work?",
-    a: "You never pay for a no-show, and you can leave any month. At day 60 we review cost per patient with you and decide together whether to keep going, change the offer, or stop.",
+    a: "We promise at least 100 new patients who pay a deposit and show up within 90 days. If we're short, you pick: we refund $60 ($75 on monthly) for every patient we missed, or ads pause and we keep working your leads free until you have 100. We check in at day 30 and day 60 so there are no surprises.",
+  },
+  {
+    q: "Is there a contract?",
+    a: "A simple agreement. The monthly plan is cancel any month. The guarantee holds when ads run at $100 a day or more for the full 90 days and monthly clinics stay all 90 days.",
   },
   {
     q: "Who talks to my leads?",
@@ -110,7 +123,7 @@ export const faqs = [
   },
   {
     q: "Where do you work?",
-    a: "Canada and the United States, except Florida for now. We take one clinic per area so we never compete against ourselves.",
+    a: "Canada and the United States, except Florida and Quebec for now. We take one clinic per city so we never compete against ourselves.",
   },
 ] as const;
 
@@ -125,6 +138,24 @@ export const applyQuestions = {
       { value: "injectables", label: "Injectables" },
       { value: "skin", label: "Skin treatments" },
       { value: "other", label: "Something else" },
+    ],
+  },
+  capacity: {
+    label: "How many more patients could you treat each month?",
+    choices: [
+      { value: "under-30", label: "Under 30" },
+      { value: "30-50", label: "30 to 50" },
+      { value: "50-100", label: "50 to 100" },
+      { value: "100-plus", label: "100 or more" },
+    ],
+  },
+  packagePrice: {
+    label: "What does your main package cost?",
+    choices: [
+      { value: "under-1000", label: "Under $1,000" },
+      { value: "1000-1500", label: "$1,000 to $1,500" },
+      { value: "1500-2500", label: "$1,500 to $2,500" },
+      { value: "2500-plus", label: "Over $2,500" },
     ],
   },
   revenue: {
@@ -146,7 +177,7 @@ export const applyQuestions = {
     ],
   },
   adBudget: {
-    label: "Can you fund a Meta ad budget? It's paid directly to Meta, not to us.",
+    label: "Can you fund at least $100 a day in Meta ads for 90 days? It's paid directly to Meta, not to us.",
     choices: [
       { value: "yes", label: "Yes" },
       { value: "unsure", label: "Not sure yet" },
